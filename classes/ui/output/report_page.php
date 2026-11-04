@@ -30,7 +30,7 @@ use local_submissionaudit\ui\message_formatter;
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 final class report_page implements \renderable, \templatable {
-    /** @var array<string, string> */
+    /** @var array */
     /** @var array Badges. */
     private const BADGES = ['pass' => 'badge bg-success', 'fail' => 'badge bg-danger', 'error' => 'badge bg-warning text-dark'];
 
@@ -40,7 +40,7 @@ final class report_page implements \renderable, \templatable {
      * @param string $title
      * @param int $courseid
      * @param audit_report[] $reports
-     * @param array<int, string> $names userid => display name.
+     * @param array $names userid => display name.
      */
     public function __construct(
         /** @var string Title. */

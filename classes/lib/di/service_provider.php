@@ -60,8 +60,8 @@ abstract class service_provider {
     /**
      * Bind an interface (or abstract class) to an autowired implementation.
      *
-     * @param class-string $abstract
-     * @param class-string $concrete
+     * @param string $abstract
+     * @param string $concrete
      * @return static
      */
     final protected function bind(string $abstract, string $concrete): static {

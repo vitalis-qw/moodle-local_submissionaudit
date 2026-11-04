@@ -36,7 +36,7 @@ interface domain_event_interface {
     /**
      * Scalar data describing the event; safe to serialise.
      *
-     * @return array<string, mixed>
+     * @return array
      */
     public function payload(): array;
 

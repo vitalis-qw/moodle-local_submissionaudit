@@ -29,7 +29,7 @@ interface dto_interface {
     /**
      * From array.
      *
-     * @param array<string, mixed> $data
+     * @param array $data
      * @return static
      */
     public static function from_array(array $data): static;
@@ -37,7 +37,7 @@ interface dto_interface {
     /**
      * To array.
      *
-     * @return array<string, mixed>
+     * @return array
      */
     public function to_array(): array;
 }

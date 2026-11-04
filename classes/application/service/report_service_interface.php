@@ -40,7 +40,7 @@ interface report_service_interface {
      * Student names.
      *
      * @param int[] $userids
-     * @return array<int, string>
+     * @return array
      */
     public function student_names(array $userids): array;
 }

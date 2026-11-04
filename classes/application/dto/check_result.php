@@ -35,7 +35,7 @@ final class check_result extends abstract_dto {
      * @param string $status pass|fail|error
      * @param float|null $score
      * @param string $messagekey
-     * @param array<string, scalar> $messageparams
+     * @param array $messageparams
      */
     public function __construct(
         /** @var string Checkname. */

@@ -29,7 +29,7 @@ use local_submissionaudit\domain\port\submission_repository_interface;
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 final class fake_submission_repository implements submission_repository_interface {
-    /** @var array<int, submission> */
+    /** @var array */
     private array $items = [];
 
     /**

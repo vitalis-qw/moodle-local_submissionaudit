@@ -27,7 +27,7 @@ namespace local_submissionaudit\lib\infrastructure\persistence;
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 final class parameter_bag {
-    /** @var array<string, mixed> */
+    /** @var array */
     private array $params = [];
 
     /** @var int */
@@ -50,7 +50,7 @@ final class parameter_bag {
     /**
      * Merge already-named parameters (from raw SQL). Names must not clash.
      *
-     * @param array<string, mixed> $params
+     * @param array $params
      */
     public function merge(array $params): void {
         foreach ($params as $name => $value) {
@@ -64,7 +64,7 @@ final class parameter_bag {
     /**
      * All.
      *
-     * @return array<string, mixed>
+     * @return array
      */
     public function all(): array {
         return $this->params;

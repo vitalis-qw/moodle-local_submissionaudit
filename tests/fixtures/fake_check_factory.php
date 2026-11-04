@@ -35,7 +35,7 @@ final class fake_check_factory implements check_factory_interface {
     /**
      * Constructor.
      *
-     * @param check_interface... $checks Checks.
+     * @param check_interface ...$checks Checks.
      */
     public function __construct(check_interface ...$checks) {
         $this->checks = $checks;

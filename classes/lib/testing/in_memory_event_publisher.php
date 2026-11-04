@@ -35,7 +35,7 @@ final class in_memory_event_publisher implements event_publisher_interface {
     /**
      * Publish.
      *
-     * @param domain_event_interface... $events Events.
+     * @param domain_event_interface ...$events Events.
      */
     public function publish(domain_event_interface ...$events): void {
         foreach ($events as $event) {
@@ -55,7 +55,7 @@ final class in_memory_event_publisher implements event_publisher_interface {
     /**
      * Of type.
      *
-     * @param class-string<domain_event_interface> $class
+     * @param string $class
      * @return domain_event_interface[]
      */
     public function of_type(string $class): array {

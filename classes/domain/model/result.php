@@ -36,7 +36,7 @@ final class result implements value_object_interface {
      * @param check_status $status
      * @param float|null $score Optional numeric score (similarity, confidence, count).
      * @param string $messagekey Language string key, without the component.
-     * @param array<string, scalar> $messageparams Parameters for the language string.
+     * @param array $messageparams Parameters for the language string.
      */
     public function __construct(
         /** @var string Machine name of the check that produced this result. */
@@ -57,7 +57,7 @@ final class result implements value_object_interface {
      *
      * @param string $checkname
      * @param string $messagekey
-     * @param array<string, scalar> $messageparams
+     * @param array $messageparams
      * @param float|null $score
      * @return self
      */
@@ -70,7 +70,7 @@ final class result implements value_object_interface {
      *
      * @param string $checkname
      * @param string $messagekey
-     * @param array<string, scalar> $messageparams
+     * @param array $messageparams
      * @param float|null $score
      * @return self
      */
@@ -83,7 +83,7 @@ final class result implements value_object_interface {
      *
      * @param string $checkname
      * @param string $messagekey
-     * @param array<string, scalar> $messageparams
+     * @param array $messageparams
      * @return self
      */
     public static function error(string $checkname, string $messagekey, array $messageparams = []): self {

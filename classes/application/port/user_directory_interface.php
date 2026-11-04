@@ -30,7 +30,7 @@ interface user_directory_interface {
      * Names.
      *
      * @param int[] $userids
-     * @return array<int, string> userid => display name; unknown ids are omitted.
+     * @return array userid => display name; unknown ids are omitted.
      */
     public function names(array $userids): array;
 }

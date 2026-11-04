@@ -31,7 +31,7 @@ use local_submissionaudit\lib\domain\repository\repository_interface;
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 abstract class in_memory_repository implements repository_interface {
-    /** @var array<int, entity_interface> */
+    /** @var array */
     protected array $items = [];
 
     /** @var int */

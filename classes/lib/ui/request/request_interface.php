@@ -29,7 +29,7 @@ interface request_interface {
     /**
      * From array.
      *
-     * @param array<string, mixed> $input Raw values; cleaned by the implementation.
+     * @param array $input Raw values; cleaned by the implementation.
      * @return static
      */
     public static function from_array(array $input): static;
@@ -44,7 +44,7 @@ interface request_interface {
     /**
      * Cleaned values, suitable for moodle_url parameters.
      *
-     * @return array<string, mixed>
+     * @return array
      */
     public function to_array(): array;
 }

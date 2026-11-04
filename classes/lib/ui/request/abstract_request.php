@@ -39,7 +39,7 @@ abstract class abstract_request implements request_interface {
     /**
      * Parameter name => core\param type.
      *
-     * @return array<string, param>
+     * @return array
      */
     abstract protected static function rules(): array;
 

@@ -39,7 +39,7 @@ final class moodle_event_publisher implements event_publisher_interface {
     /**
      * Constructor.
      *
-     * @param array<class-string<domain_event_interface>, callable(domain_event_interface): \core\event\base> $map
+     * @param array $map Domain event class => callable(domain_event_interface): \core\event\base.
      */
     public function __construct(
         /** @var array Map. */
@@ -50,7 +50,7 @@ final class moodle_event_publisher implements event_publisher_interface {
     /**
      * Publish.
      *
-     * @param domain_event_interface... $events Events.
+     * @param domain_event_interface ...$events Events.
      */
     public function publish(domain_event_interface ...$events): void {
         foreach ($events as $event) {

@@ -65,7 +65,7 @@ interface mapper_interface {
      * To array collection.
      *
      * @param iterable $entities
-     * @return array<int, array<string, mixed>>
+     * @return array
      */
     public function to_array_collection(iterable $entities): array;
 }

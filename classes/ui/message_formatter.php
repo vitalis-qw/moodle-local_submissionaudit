@@ -30,7 +30,7 @@ final class message_formatter {
      * Format.
      *
      * @param string $key Language string key without the component.
-     * @param array<string, scalar> $params
+     * @param array $params
      * @return string Escaped, ready for output.
      */
     public static function format(string $key, array $params = []): string {

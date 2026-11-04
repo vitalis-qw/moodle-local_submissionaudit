@@ -31,7 +31,7 @@ final class fake_user_directory implements user_directory_interface {
     /**
      * Constructor.
      *
-     * @param array<int, string> $names
+     * @param array $names
      */
     public function __construct(
         /** @var array Names. */
