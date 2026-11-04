@@ -1,0 +1,22 @@
+name: Feature request or new check
+description: Suggest a new check or an improvement.
+labels: [enhancement]
+body:
+  - type: textarea
+    id: problem
+    attributes:
+      label: The problem
+      description: What do tutors or admins need that the plugin does not do today?
+    validations:
+      required: true
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Proposed behaviour
+      description: For a new check, when should it pass, fail or report an error, and which setting turns it on?
+    validations:
+      required: true
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternatives considered
