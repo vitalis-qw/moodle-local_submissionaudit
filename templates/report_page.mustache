@@ -1,0 +1,68 @@
+{{!
+    This file is part of Moodle - http://moodle.org/
+
+    Moodle is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    Moodle is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
+}}
+{{!
+    @template local_submissionaudit/report_page
+
+    Audit report of one assignment: one row per student and check.
+
+    Context variables required for this template:
+    * title - page heading
+    * hasrows - whether there is anything to show
+    * rows - list of {studentname, studenturl, check, status, badge, score, message, time}
+    * noresults - text shown when rows is empty
+
+    Example context (json):
+    {
+        "title": "Submission audit: Essay 1",
+        "hasrows": true,
+        "noresults": "No audited submissions yet.",
+        "rows": [
+            {"studentname": "Ann Student", "studenturl": "#", "check": "Minimum words", "status": "Fail",
+             "badge": "badge bg-danger", "score": "12.00", "message": "Only 12 words, minimum 25.", "time": "4 Nov 2026, 10:00"}
+        ]
+    }
+}}
+<h2>{{title}}</h2>
+{{#hasrows}}
+<table class="table generaltable local-submissionaudit-report">
+    <thead>
+        <tr>
+            <th scope="col">{{#str}} col:student, local_submissionaudit {{/str}}</th>
+            <th scope="col">{{#str}} col:check, local_submissionaudit {{/str}}</th>
+            <th scope="col">{{#str}} col:status, local_submissionaudit {{/str}}</th>
+            <th scope="col">{{#str}} col:score, local_submissionaudit {{/str}}</th>
+            <th scope="col">{{#str}} col:message, local_submissionaudit {{/str}}</th>
+            <th scope="col">{{#str}} col:time, local_submissionaudit {{/str}}</th>
+        </tr>
+    </thead>
+    <tbody>
+        {{#rows}}
+        <tr>
+            <td><a href="{{studenturl}}">{{studentname}}</a></td>
+            <td>{{check}}</td>
+            <td><span class="{{badge}}">{{status}}</span></td>
+            <td>{{score}}</td>
+            <td>{{{message}}}</td>
+            <td>{{time}}</td>
+        </tr>
+        {{/rows}}
+    </tbody>
+</table>
+{{/hasrows}}
+{{^hasrows}}
+<div class="alert alert-info" role="alert">{{noresults}}</div>
+{{/hasrows}}

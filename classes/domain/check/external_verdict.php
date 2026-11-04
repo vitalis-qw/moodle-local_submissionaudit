@@ -14,42 +14,52 @@
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
+declare(strict_types=1);
+
 namespace local_submissionaudit\domain\check;
 
-use local_submissionaudit\domain\check_interface;
+use local_submissionaudit\domain\model\result;
+use local_submissionaudit\domain\model\submission;
 use local_submissionaudit\domain\port\verdict_client_interface;
-use local_submissionaudit\domain\result;
-use local_submissionaudit\domain\submission;
 
 /**
- * Delegates the decision to an external service through a port.
- *
- * A slow or failing service produces an error result; it never blocks the
- * other checks, and the tutor can see that the verdict is missing.
+ * A slow or failing service produces an error result; it never blocks the other
+ * checks, and the tutor can see that the verdict is missing.
  *
  * @package    local_submissionaudit
- * @copyright  2026 Vitalii Kuzmyn
+ * @copyright  2026 Vitalii Kuzmyn <vitalis.qw@gmail.com>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 final class external_verdict implements check_interface {
     /** @var string */
+    /** @var string Name. */
     public const NAME = 'external_verdict';
 
     /**
+     * Constructor.
+     *
      * @param verdict_client_interface $client
      */
-    public function __construct(private readonly verdict_client_interface $client) {
+    public function __construct(
+        /** @var verdict_client_interface Client. */
+        private readonly verdict_client_interface $client,
+    ) {
     }
 
     /**
-     * {@inheritDoc}
+     * Name.
+     *
+     * @return string
      */
     public function name(): string {
         return self::NAME;
     }
 
     /**
-     * {@inheritDoc}
+     * Run.
+     *
+     * @param submission $submission Submission.
+     * @return result
      */
     public function run(submission $submission): result {
         try {

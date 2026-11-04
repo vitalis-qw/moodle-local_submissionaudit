@@ -14,6 +14,8 @@
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
+declare(strict_types=1);
+
 namespace local_submissionaudit\privacy;
 
 use core_privacy\local\metadata\collection;
@@ -22,24 +24,28 @@ use core_privacy\local\request\approved_userlist;
 use core_privacy\local\request\contextlist;
 use core_privacy\local\request\userlist;
 use core_privacy\local\request\writer;
+use local_submissionaudit\ui\message_formatter;
 
 /**
  * Privacy API: audit results are personal data of the student.
  *
  * @package    local_submissionaudit
- * @copyright  2026 Vitalii Kuzmyn
+ * @copyright  2026 Vitalii Kuzmyn <vitalis.qw@gmail.com>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 final class provider implements
     \core_privacy\local\metadata\provider,
-    \core_privacy\local\request\plugin\provider,
-    \core_privacy\local\request\core_userlist_provider {
-
+    \core_privacy\local\request\core_userlist_provider,
+    \core_privacy\local\request\plugin\provider {
     /** @var string */
+    /** @var string Table. */
     private const TABLE = 'local_submissionaudit_result';
 
     /**
-     * {@inheritDoc}
+     * Get metadata.
+     *
+     * @param collection $collection Collection.
+     * @return collection
      */
     public static function get_metadata(collection $collection): collection {
         $collection->add_database_table(self::TABLE, [
@@ -51,17 +57,18 @@ final class provider implements
             'message' => 'privacy:metadata:result:message',
             'timecreated' => 'privacy:metadata:result:timecreated',
         ], 'privacy:metadata:result');
-
         $collection->add_external_location_link('externalverdict', [
             'text' => 'privacy:metadata:external:text',
             'filenames' => 'privacy:metadata:external:filenames',
         ], 'privacy:metadata:external');
-
         return $collection;
     }
 
     /**
-     * {@inheritDoc}
+     * Get contexts for userid.
+     *
+     * @param int $userid Userid.
+     * @return contextlist
      */
     public static function get_contexts_for_userid(int $userid): contextlist {
         $sql = "SELECT ctx.id
@@ -76,7 +83,9 @@ final class provider implements
     }
 
     /**
-     * {@inheritDoc}
+     * Get users in context.
+     *
+     * @param userlist $userlist Userlist.
      */
     public static function get_users_in_context(userlist $userlist) {
         $context = $userlist->get_context();
@@ -92,11 +101,12 @@ final class provider implements
     }
 
     /**
-     * {@inheritDoc}
+     * Export user data.
+     *
+     * @param approved_contextlist $contextlist Contextlist.
      */
     public static function export_user_data(approved_contextlist $contextlist) {
         global $DB;
-
         $userid = $contextlist->get_user()->id;
         foreach ($contextlist->get_contexts() as $context) {
             $cm = self::assign_cm($context);
@@ -114,7 +124,7 @@ final class provider implements
                     'check' => $record->checkname,
                     'status' => $record->status,
                     'score' => $record->score,
-                    'message' => \local_submissionaudit\local\message_formatter::format($record->message),
+                    'message' => message_formatter::format_stored($record->message),
                     'timecreated' => \core_privacy\local\request\transform::datetime($record->timecreated),
                 ];
             }
@@ -126,11 +136,12 @@ final class provider implements
     }
 
     /**
-     * {@inheritDoc}
+     * Delete data for all users in context.
+     *
+     * @param \context $context Context.
      */
     public static function delete_data_for_all_users_in_context(\context $context) {
         global $DB;
-
         $cm = self::assign_cm($context);
         if ($cm) {
             $DB->delete_records(self::TABLE, ['assignid' => $cm->instance]);
@@ -138,11 +149,12 @@ final class provider implements
     }
 
     /**
-     * {@inheritDoc}
+     * Delete data for user.
+     *
+     * @param approved_contextlist $contextlist Contextlist.
      */
     public static function delete_data_for_user(approved_contextlist $contextlist) {
         global $DB;
-
         $userid = $contextlist->get_user()->id;
         foreach ($contextlist->get_contexts() as $context) {
             $cm = self::assign_cm($context);
@@ -153,11 +165,12 @@ final class provider implements
     }
 
     /**
-     * {@inheritDoc}
+     * Delete data for users.
+     *
+     * @param approved_userlist $userlist Userlist.
      */
     public static function delete_data_for_users(approved_userlist $userlist) {
         global $DB;
-
         $cm = self::assign_cm($userlist->get_context());
         $userids = $userlist->get_userids();
         if (!$cm || !$userids) {

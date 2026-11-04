@@ -14,31 +14,35 @@
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
+declare(strict_types=1);
+
 namespace local_submissionaudit\domain\check;
 
-use local_submissionaudit\domain\check_interface;
-use local_submissionaudit\domain\result;
-use local_submissionaudit\domain\submission;
+use local_submissionaudit\domain\model\result;
+use local_submissionaudit\domain\model\submission;
+use local_submissionaudit\lib\domain\exception\invariant_violation_exception;
 
 /**
  * Fails when a submitted file has an extension outside the allowed list.
  *
  * @package    local_submissionaudit
- * @copyright  2026 Vitalii Kuzmyn
+ * @copyright  2026 Vitalii Kuzmyn <vitalis.qw@gmail.com>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 final class allowed_file_types implements check_interface {
     /** @var string */
+    /** @var string Name. */
     public const NAME = 'allowed_file_types';
 
     /** @var string[] Lower-case extensions without the dot. */
-    private array $allowed;
+    private array $allowed = [];
 
     /**
+     * Constructor.
+     *
      * @param string[] $extensions Allowed extensions, with or without a leading dot, any case.
      */
     public function __construct(array $extensions) {
-        $this->allowed = [];
         foreach ($extensions as $extension) {
             $clean = strtolower(ltrim(trim((string) $extension), '.'));
             if ($clean !== '') {
@@ -46,33 +50,39 @@ final class allowed_file_types implements check_interface {
             }
         }
         if ($this->allowed === []) {
-            throw new \InvalidArgumentException('At least one allowed extension is required');
+            throw new invariant_violation_exception('At least one allowed extension is required');
         }
     }
 
     /**
-     * {@inheritDoc}
+     * Name.
+     *
+     * @return string
      */
     public function name(): string {
         return self::NAME;
     }
 
     /**
-     * {@inheritDoc}
+     * Run.
+     *
+     * @param submission $submission Submission.
+     * @return result
      */
     public function run(submission $submission): result {
-        if ($submission->filenames === []) {
+        $filenames = $submission->filenames();
+        if ($filenames === []) {
             return result::pass(self::NAME, 'msg:filetypes_nofiles');
         }
         $rejected = [];
-        foreach ($submission->filenames as $index => $filename) {
-            if (!in_array($submission->file_extensions()[$index], $this->allowed, true)) {
-                $rejected[] = $filename;
+        foreach ($submission->file_extensions() as $index => $extension) {
+            if (!in_array($extension, $this->allowed, true)) {
+                $rejected[] = $filenames[$index];
             }
         }
         if ($rejected !== []) {
             return result::fail(self::NAME, 'msg:filetypes_fail', ['files' => implode(', ', $rejected)], (float) count($rejected));
         }
-        return result::pass(self::NAME, 'msg:filetypes_pass', ['count' => count($submission->filenames)]);
+        return result::pass(self::NAME, 'msg:filetypes_pass', ['count' => count($filenames)]);
     }
 }

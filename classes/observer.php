@@ -14,23 +14,23 @@
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
+declare(strict_types=1);
+
 namespace local_submissionaudit;
 
 use local_submissionaudit\task\audit_submission;
 
 /**
- * Event observer: queues an audit, never runs one inline.
- *
- * The submission request must stay fast, and a failing external service
- * must not surface as an error to the student.
+ * The submission request must stay fast, and a failing external service must not
+ * surface as an error to the student.
  *
  * @package    local_submissionaudit
- * @copyright  2026 Vitalii Kuzmyn
+ * @copyright  2026 Vitalii Kuzmyn <vitalis.qw@gmail.com>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 final class observer {
     /**
-     * A student submitted an assignment for grading.
+     * Assessable submitted.
      *
      * @param \mod_assign\event\assessable_submitted $event
      */

@@ -14,22 +14,23 @@
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
+declare(strict_types=1);
+
 namespace local_submissionaudit\domain\port;
 
-use local_submissionaudit\domain\submission;
-use local_submissionaudit\domain\verdict;
+use local_submissionaudit\domain\model\submission;
+use local_submissionaudit\domain\model\verdict;
 
 /**
- * Port: an external service that judges a submission (similarity, AI-writing
- * detection, a custom rules engine).
+ * Port: an external service that judges a submission.
  *
  * @package    local_submissionaudit
- * @copyright  2026 Vitalii Kuzmyn
+ * @copyright  2026 Vitalii Kuzmyn <vitalis.qw@gmail.com>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 interface verdict_client_interface {
     /**
-     * Ask the service for a verdict.
+     * Verdict.
      *
      * @param submission $submission
      * @return verdict
