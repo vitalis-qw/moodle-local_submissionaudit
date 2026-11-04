@@ -18,7 +18,7 @@
  * English language strings.
  *
  * @package    local_submissionaudit
- * @copyright  2026 Vitalii Kuzmyn
+ * @copyright  2026 Vitalii Kuzmyn <vitalis.qw@gmail.com>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
@@ -67,6 +67,9 @@ $string['msg:filetypes_fail'] = 'Not allowed: {$a->files}.';
 $string['msg:external_message'] = '{$a->message}';
 $string['msg:external_error'] = 'The external service could not be reached: {$a->error}';
 $string['msg:check_error'] = 'The check failed unexpectedly: {$a->error}';
+
+// Events.
+$string['event:audit_completed'] = 'Submission audited';
 
 // Tasks.
 $string['task:audit_submission'] = 'Audit one assignment submission';

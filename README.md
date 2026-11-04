@@ -1,31 +1,34 @@
 # Submission audit (`local_submissionaudit`)
 
-A Moodle local plugin that runs configurable checks on every assignment
-submission in the background and gives tutors a per-assignment audit report.
+A Moodle local plugin that runs configurable checks on every assignment submission
+in the background and gives tutors a per-assignment audit report.
 
-It exists to show one way of building a Moodle plugin that stays testable as
-it grows: the rules live in a framework-free domain layer, Moodle is reached
-only through small adapters, and the slow or unreliable parts (an external
-analysis service) can never block a student's submission.
+It exists to show one way of building a Moodle plugin that stays testable as it
+grows: a framework-free domain, use cases that talk to Moodle only through ports,
+dependency injection through Moodle's own container, and a thin UI edge. The slow
+or unreliable part (an external analysis service) can never block a student's
+submission.
 
 | | |
 |---|---|
-| Moodle | 4.1 – 4.5 |
-| PHP | 8.1+ |
+| Moodle | 4.5 – 5.2 |
+| PHP | 8.2+ |
+| Databases | PostgreSQL, MariaDB/MySQL (CI runs both) |
 | Licence | GPL v3 or later |
-| Status | beta, 0.1.0 |
+| Status | beta, 0.2.0 |
 
 ## What it does
 
 1. A student submits an assignment. `mod_assign` fires
    `\mod_assign\event\assessable_submitted`.
-2. The observer queues one ad-hoc task for that submission and returns at
-   once. Nothing runs inside the student's request.
-3. Cron runs the task: the submission (online text, file names) is loaded,
-   every configured check runs, the results are stored. A check that throws
+2. The observer queues one ad-hoc task for that submission and returns at once.
+   Nothing runs inside the student's request.
+3. Cron runs the task: the submission (online text, file names) is loaded, every
+   configured check runs, the results are stored, and
+   `\local_submissionaudit\event\audit_completed` is fired. A check that throws
    becomes an `error` row; the other checks still run.
-4. Tutors open **Submission audit** in the assignment's settings menu and see
-   one row per student and check: pass / fail / error, an optional score and a
+4. Tutors open **Submission audit** in the assignment's settings menu and see one
+   row per student and check: pass / fail / error, an optional score and a
    translated explanation.
 
 Built-in checks:
@@ -38,92 +41,76 @@ Built-in checks:
 
 A check is off while its setting is empty or zero.
 
-## Structure
+## Architecture
+
+Four layers; dependencies point inward only.
 
 ```
 classes/
-├── domain/                 pure PHP, no Moodle: the rules
-│   ├── submission.php        value object (text, file names, word count)
-│   ├── result.php            value object (status, score, message key + params)
-│   ├── check_interface.php   one rule
-│   ├── auditor.php           runs all checks, isolates failures
-│   ├── audit_runner.php      the use case: load → audit → store, via ports
-│   ├── check/                minimum_words, allowed_file_types, external_verdict
-│   └── port/                 interfaces the domain needs the outside world to implement
-├── adapter/                Moodle implementations of the ports
-│   ├── moodle_submission_loader.php   assign_submission + onlinetext + file area → submission
-│   ├── db_result_store.php            results → local_submissionaudit_result
-│   ├── curl_verdict_client.php        Moodle \curl → verdict
-│   └── check_factory.php              plugin settings → list of checks
-├── observer.php            event → queued task
-├── task/audit_submission.php   ad-hoc task: wires adapters to the domain
-├── local/message_formatter.php stored {key, params} → translated text
-└── privacy/provider.php    GDPR export and deletion
+├── domain/            pure PHP, no Moodle import anywhere
+│   ├── model/           submission (entity), audit (aggregate root), result, verdict, check_status
+│   ├── check/           check_interface, minimum_words, allowed_file_types, external_verdict
+│   ├── service/         auditor: runs the checks, isolates failures
+│   ├── port/            interfaces the domain needs the outside world to implement
+│   └── event/           audit_completed (domain event, recorded by the aggregate)
+├── application/       use cases; in and out as DTOs
+│   ├── dto/             audit_request, audit_report, check_result
+│   ├── service/         audit_service (load → audit → save → publish), report_service
+│   ├── factory/         the only places that construct audits and submissions
+│   ├── mapper/          audit → audit_report
+│   ├── security/        audit_action, audit_permission_interface (+ factory)
+│   └── port/            user_directory_interface
+├── infrastructure/    Moodle adapters implementing the ports
+│   ├── persistence/     db_audit_repository, result_record_mapper (explicit casts)
+│   ├── moodle/          moodle_submission_repository, settings_check_factory, moodle_user_directory
+│   ├── http/            curl_verdict_client (Moodle \curl: proxy and blocked hosts honoured)
+│   ├── security/        capability_audit_permission (+ factory)
+│   ├── event/           audit_completed_event_factory: domain event → Moodle event
+│   └── config/          settings: typed view of get_config()
+├── ui/                HTTP edge
+│   ├── request/         report_request (cleaned with \core\param)
+│   ├── controller/      report_controller: request in, response out
+│   └── output/          report_page renderable + templates/report_page.mustache
+├── lib/               base classes (entity/aggregate, DTO, mapper, permission, filters,
+│                      request/controller/response, service provider) shared by the layers
+├── service_provider.php   binds every interface to its implementation (\core\di)
+├── observer.php, task/, event/, privacy/   thin Moodle entry points
+report.php             three lines: build the request, resolve the controller, send
 ```
 
-Why the split:
+Rules the code follows:
 
-- **Domain tests run without a database.** `tests/domain/auditor_test.php`
-  covers every rule with `basic_testcase` in milliseconds.
-- **Messages are keys, not text.** The domain returns a language-string key
-  with parameters; the report renders it in the tutor's language. Tests
-  assert on keys and never on English prose.
-- **The external service is a port.** `external_verdict` depends on
-  `verdict_client_interface`; the test uses a three-line fake, production
-  uses Moodle's `\curl` (proxy and blocked-host settings apply).
-- **Adding a check** is one class implementing `check_interface`, one line in
-  `check_factory`, and a `check:<name>` string.
+- Objects cross a layer boundary as DTOs; entities never reach the UI.
+- Every service, port, repository, factory, mapper, controller and permission has an
+  interface; implementations are bound in `service_provider.php` and resolved with
+  `\core\di::get()`. Tests swap them with `\core\di::set()`.
+- Entities are built through factories or named constructors only.
+- The domain throws its own exceptions; the controller translates them into Moodle
+  error pages (`guard()`).
+- Authorisation is a `permission` object with `can()` / `require()`, backed by the
+  `local/submissionaudit:viewreport` capability.
+- Messages are stored as `{key, params}` and translated when displayed, so the
+  domain does not know which language the tutor reads.
 
 ## Install
 
-```bash
-cd /path/to/moodle
-git clone https://github.com/<owner>/moodle-local_submissionaudit local/submissionaudit
-php admin/cli/upgrade.php --non-interactive
+Copy to `local/submissionaudit` and run the upgrade (web or
+`php admin/cli/upgrade.php`). Settings are under *Site administration → Plugins →
+Local plugins → Submission audit*.
+
+## Tests
+
 ```
-
-Then *Site administration → Plugins → Local plugins → Submission audit*:
-enable, set a minimum word count and/or allowed extensions, optionally an
-external endpoint. Cron must be running for results to appear.
-
-### External endpoint contract
-
-Request, `POST`, `application/json`, `Authorization: Bearer <token>` when set:
-
-```json
-{"submissionid": 42, "text": "plain text of the submission", "filenames": ["essay.pdf"]}
-```
-
-Response, HTTP 2xx:
-
-```json
-{"status": "pass" | "fail", "score": 0.87, "message": "87% similarity with 2 sources"}
-```
-
-Anything else (timeout after 20 s, non-2xx, malformed JSON) is stored as an
-`error` row with the reason, so the tutor sees that the verdict is missing
-instead of a silent pass.
-
-## Development
-
-```bash
-# in a Moodle checkout with PHPUnit initialised
 vendor/bin/phpunit --testsuite local_submissionaudit_testsuite
-# or with moodle-plugin-ci
-moodle-plugin-ci phpunit
 ```
 
-CI (`.github/workflows/ci.yml`) runs `moodle-plugin-ci`: phplint, phpcs with
-the Moodle standard, phpdoc, savepoints, mustache, grunt, phpunit on Moodle
-4.1 and 4.5 with PHP 8.1 – 8.3, PostgreSQL and MariaDB.
+Domain and application tests run without a database; infrastructure and
+integration tests use Moodle's generators. CI runs the suite against PostgreSQL and
+MariaDB with [moodle-plugin-ci](https://github.com/moodlehq/moodle-plugin-ci).
 
-## Roadmap
+## Extending
 
-- Re-run button on the report page.
-- Per-assignment overrides of the site-wide settings.
-- Notify the tutor when a check fails (message API).
-- Behat scenario for the report page.
-
-## Author
-
-Vitalii Kuzmyn — senior PHP developer, Moodle and Totara plugins.
+A new check is one class implementing `domain\check\check_interface` plus one
+block in `infrastructure\moodle\settings_check_factory` (and a setting). A check
+that needs the outside world asks for a port in its constructor; the port's adapter
+is bound in `service_provider.php`.

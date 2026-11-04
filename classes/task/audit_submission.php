@@ -14,52 +14,43 @@
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
-namespace local_submissionaudit\task;
+declare(strict_types=1);
 
-use local_submissionaudit\adapter\check_factory;
-use local_submissionaudit\adapter\db_result_store;
-use local_submissionaudit\adapter\moodle_submission_loader;
-use local_submissionaudit\domain\audit_runner;
-use local_submissionaudit\domain\auditor;
+namespace local_submissionaudit\task;
 
 /**
  * Ad-hoc task: audit one submission in the background.
  *
- * Thin by design: wires adapters to the domain and hands over.
- *
  * @package    local_submissionaudit
- * @copyright  2026 Vitalii Kuzmyn
+ * @copyright  2026 Vitalii Kuzmyn <vitalis.qw@gmail.com>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
+
+use local_submissionaudit\application\dto\audit_request;
+use local_submissionaudit\application\service\audit_service_interface;
+use local_submissionaudit\infrastructure\config\settings;
+
+/**
+ * Thin by design: fetches the use case from the container and hands over.
+ */
 final class audit_submission extends \core\task\adhoc_task {
-    /**
-     * Task name shown in the admin UI.
-     *
-     * @return string
-     */
     public function get_name(): string {
         return get_string('task:audit_submission', 'local_submissionaudit');
     }
 
-    /**
-     * Run the audit.
-     */
     public function execute(): void {
-        if (!get_config('local_submissionaudit', 'enabled')) {
+        if (!\core\di::get(settings::class)->enabled()) {
             return;
         }
-        $data = $this->get_custom_data();
-        $submissionid = (int) ($data->submissionid ?? 0);
+        $submissionid = (int) ($this->get_custom_data()->submissionid ?? 0);
         if ($submissionid <= 0) {
             return;
         }
-
-        $runner = new audit_runner(
-            new moodle_submission_loader(),
-            new auditor(check_factory::from_config()),
-            new db_result_store()
-        );
-        $results = $runner->run($submissionid);
-        mtrace(sprintf('local_submissionaudit: submission %d, %d check(s) stored', $submissionid, count($results)));
+        $report = \core\di::get(audit_service_interface::class)->run(new audit_request($submissionid));
+        mtrace(sprintf(
+            'local_submissionaudit: submission %d, %d check(s) stored',
+            $submissionid,
+            $report === null ? 0 : count($report->results),
+        ));
     }
 }

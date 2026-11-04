@@ -18,15 +18,15 @@
  * Plugin version and requirements.
  *
  * @package    local_submissionaudit
- * @copyright  2026 Vitalii Kuzmyn
+ * @copyright  2026 Vitalii Kuzmyn <vitalis.qw@gmail.com>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
 defined('MOODLE_INTERNAL') || die();
 
 $plugin->component = 'local_submissionaudit';
-$plugin->version = 2026110300;
-$plugin->requires = 2022112800; // Moodle 4.1.
-$plugin->supported = [401, 405];
+$plugin->version = 2026110400;
+$plugin->requires = 2024100700; // Moodle 4.5: \core\di and the di_configuration hook.
+$plugin->supported = [405, 502];
 $plugin->maturity = MATURITY_BETA;
-$plugin->release = '0.1.0';
+$plugin->release = '0.2.0';
