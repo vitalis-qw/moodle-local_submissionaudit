@@ -18,6 +18,8 @@ declare(strict_types=1);
 
 namespace local_submissionaudit\application\factory;
 
+use local_submissionaudit\domain\model\submission;
+
 /**
  * Builds submissions.
  *
@@ -25,10 +27,17 @@ namespace local_submissionaudit\application\factory;
  * @copyright  2026 Vitalii Kuzmyn <vitalis.qw@gmail.com>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-
-use local_submissionaudit\domain\model\submission;
-
 final class submission_factory implements submission_factory_interface {
+    /**
+     * Create.
+     *
+     * @param int $id Id.
+     * @param int $assignid Assignid.
+     * @param int $userid Userid.
+     * @param string $text Text.
+     * @param array $filenames Filenames.
+     * @return submission
+     */
     public function create(int $id, int $assignid, int $userid, string $text, array $filenames): submission {
         return new submission($id, $assignid, $userid, $text, array_values(array_map('strval', $filenames)));
     }

@@ -16,15 +16,9 @@
 
 declare(strict_types=1);
 
-/**
- * Observer, task, container and report page working together.
- *
- * @package    local_submissionaudit
- * @copyright  2026 Vitalii Kuzmyn <vitalis.qw@gmail.com>
- * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
- */
-
 namespace local_submissionaudit;
+
+defined('MOODLE_INTERNAL') || die();
 
 require_once(__DIR__ . '/fixtures/fixtures.php');
 
@@ -39,6 +33,8 @@ use local_submissionaudit\ui\output\report_page;
 use local_submissionaudit\ui\request\report_request;
 
 /**
+ * Observer, task, container and report page working together.
+ *
  * @covers \local_submissionaudit\observer
  * @covers \local_submissionaudit\task\audit_submission
  * @covers \local_submissionaudit\service_provider
@@ -48,10 +44,17 @@ use local_submissionaudit\ui\request\report_request;
  * @covers \local_submissionaudit\ui\output\report_page
  * @covers \local_submissionaudit\ui\request\report_request
  * @covers \local_submissionaudit\ui\message_formatter
+ *
+ * @package    local_submissionaudit
+ * @copyright  2026 Vitalii Kuzmyn <vitalis.qw@gmail.com>
+ * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 final class integration_test extends \advanced_testcase {
     use assign_fixture_trait;
 
+    /**
+     * Test: container resolves the use cases.
+     */
     public function test_container_resolves_the_use_cases(): void {
         $this->resetAfterTest();
         $this->assertInstanceOf(audit_service_interface::class, \core\di::get(audit_service_interface::class));
@@ -60,6 +63,9 @@ final class integration_test extends \advanced_testcase {
         $this->assertInstanceOf(verdict_client_interface::class, \core\di::get(verdict_client_interface::class));
     }
 
+    /**
+     * Test: event queues an adhoc task.
+     */
     public function test_event_queues_an_adhoc_task(): void {
         $this->resetAfterTest();
         [, $assign, $submission, $student] = $this->create_submission('x');
@@ -78,6 +84,9 @@ final class integration_test extends \advanced_testcase {
         $this->assertSame((int) $submission->id, (int) reset($tasks)->get_custom_data()->submissionid);
     }
 
+    /**
+     * Test: task stores results and fires the event.
+     */
     public function test_task_stores_results_and_fires_the_event(): void {
         global $DB;
         $this->resetAfterTest();
@@ -104,6 +113,9 @@ final class integration_test extends \advanced_testcase {
         $sink->close();
     }
 
+    /**
+     * Test: task is a noop when disabled or submission missing.
+     */
     public function test_task_is_a_noop_when_disabled_or_submission_missing(): void {
         global $DB;
         $this->resetAfterTest();
@@ -124,6 +136,9 @@ final class integration_test extends \advanced_testcase {
         $this->assertSame(0, $DB->count_records(db_audit_repository::TABLE));
     }
 
+    /**
+     * Test: report page renders rows for a tutor and denies a student.
+     */
     public function test_report_page_renders_rows_for_a_tutor_and_denies_a_student(): void {
         $this->resetAfterTest();
         set_config('minwords', '3', 'local_submissionaudit');
@@ -151,6 +166,9 @@ final class integration_test extends \advanced_testcase {
         \core\di::get(report_controller_interface::class)->handle($request);
     }
 
+    /**
+     * Test: report page without results.
+     */
     public function test_report_page_without_results(): void {
         global $PAGE;
         $this->resetAfterTest();

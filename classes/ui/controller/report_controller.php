@@ -18,14 +18,6 @@ declare(strict_types=1);
 
 namespace local_submissionaudit\ui\controller;
 
-/**
- * Renders the audit report of an assignment.
- *
- * @package    local_submissionaudit
- * @copyright  2026 Vitalii Kuzmyn <vitalis.qw@gmail.com>
- * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
- */
-
 use local_submissionaudit\application\dto\audit_report;
 use local_submissionaudit\application\security\audit_action;
 use local_submissionaudit\application\security\audit_permission_factory_interface;
@@ -37,17 +29,34 @@ use local_submissionaudit\lib\ui\response\response_interface;
 use local_submissionaudit\ui\output\report_page;
 use local_submissionaudit\ui\request\report_request;
 
+/**
+ * Renders the audit report of an assignment.
+ *
+ * @package    local_submissionaudit
+ * @copyright  2026 Vitalii Kuzmyn <vitalis.qw@gmail.com>
+ * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ */
 final class report_controller extends abstract_page_controller implements report_controller_interface {
     /**
+     * Constructor.
+     *
      * @param report_service_interface $reports
      * @param audit_permission_factory_interface $permissions
      */
     public function __construct(
+        /** @var report_service_interface Reports. */
         private readonly report_service_interface $reports,
+        /** @var audit_permission_factory_interface Permissions. */
         private readonly audit_permission_factory_interface $permissions,
     ) {
     }
 
+    /**
+     * Handle.
+     *
+     * @param request_interface $request Request.
+     * @return response_interface
+     */
     public function handle(request_interface $request): response_interface {
         global $USER, $PAGE, $OUTPUT;
         if (!$request instanceof report_request) {

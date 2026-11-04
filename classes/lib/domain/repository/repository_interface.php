@@ -18,20 +18,14 @@ declare(strict_types=1);
 
 namespace local_submissionaudit\lib\domain\repository;
 
+use local_submissionaudit\lib\domain\model\entity_interface;
+
 /**
  * Port: full repository.
  *
  * @package    local_submissionaudit
  * @copyright  2026 Vitalii Kuzmyn <vitalis.qw@gmail.com>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
- */
-
-use local_submissionaudit\lib\domain\model\entity_interface;
-
-/**
- * @template T of entity_interface
- * @extends read_repository_interface<T>
- * @extends write_repository_interface<T>
  */
 interface repository_interface extends read_repository_interface, write_repository_interface {
 }

@@ -19,16 +19,12 @@ declare(strict_types=1);
 namespace local_submissionaudit\lib\domain\exception;
 
 /**
- * A business rule was broken.
+ * Thrown by entities and value objects when a constructor or method would leave them in
+ * an invalid state.
  *
  * @package    local_submissionaudit
  * @copyright  2026 Vitalii Kuzmyn <vitalis.qw@gmail.com>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
- */
-
-/**
- * Thrown by entities and value objects when a constructor or method would leave them in
- * an invalid state.
  */
 class invariant_violation_exception extends domain_exception {
 }

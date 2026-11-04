@@ -18,6 +18,9 @@ declare(strict_types=1);
 
 namespace local_submissionaudit\domain\service;
 
+use local_submissionaudit\domain\model\result;
+use local_submissionaudit\domain\model\submission;
+
 /**
  * Domain service: run every configured check.
  *
@@ -25,12 +28,10 @@ namespace local_submissionaudit\domain\service;
  * @copyright  2026 Vitalii Kuzmyn <vitalis.qw@gmail.com>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-
-use local_submissionaudit\domain\model\result;
-use local_submissionaudit\domain\model\submission;
-
 interface auditor_interface {
     /**
+     * Audit.
+     *
      * @param submission $submission
      * @return result[] One result per check, in configuration order.
      */

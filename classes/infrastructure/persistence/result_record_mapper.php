@@ -18,6 +18,10 @@ declare(strict_types=1);
 
 namespace local_submissionaudit\infrastructure\persistence;
 
+use local_submissionaudit\domain\model\audit;
+use local_submissionaudit\domain\model\check_status;
+use local_submissionaudit\domain\model\result;
+
 /**
  * DB record ↔ result value object, with explicit casts.
  *
@@ -25,13 +29,10 @@ namespace local_submissionaudit\infrastructure\persistence;
  * @copyright  2026 Vitalii Kuzmyn <vitalis.qw@gmail.com>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-
-use local_submissionaudit\domain\model\audit;
-use local_submissionaudit\domain\model\check_status;
-use local_submissionaudit\domain\model\result;
-
 final class result_record_mapper {
     /**
+     * To result.
+     *
      * @param \stdClass $record Row of local_submissionaudit_result.
      * @return result
      */
@@ -47,6 +48,8 @@ final class result_record_mapper {
     }
 
     /**
+     * To record.
+     *
      * @param audit $audit
      * @param result $result
      * @return \stdClass

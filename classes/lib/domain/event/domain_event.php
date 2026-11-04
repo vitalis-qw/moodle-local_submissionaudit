@@ -19,26 +19,30 @@ declare(strict_types=1);
 namespace local_submissionaudit\lib\domain\event;
 
 /**
- * Base class for domain events.
+ * Readonly base: subclasses add promoted constructor properties and implement name()
+ * and payload().
  *
  * @package    local_submissionaudit
  * @copyright  2026 Vitalii Kuzmyn <vitalis.qw@gmail.com>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-
-/**
- * Readonly base: subclasses add promoted constructor properties and implement name()
- * and payload().
- */
-abstract readonly class domain_event implements domain_event_interface {
+abstract class domain_event implements domain_event_interface {
     /**
+     * Constructor.
+     *
      * @param int $occurredat Unix timestamp supplied by the caller (keeps the domain clock-free).
      */
     public function __construct(
-        private int $occurredat,
+        /** @var int Unix timestamp supplied by the caller (keeps the domain clock-free). */
+        private readonly int $occurredat,
     ) {
     }
 
+    /**
+     * Occurred at.
+     *
+     * @return int
+     */
     public function occurred_at(): int {
         return $this->occurredat;
     }

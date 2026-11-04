@@ -18,30 +18,34 @@ declare(strict_types=1);
 
 namespace local_submissionaudit\lib\infrastructure\security;
 
-/**
- * Permission backed by Moodle capabilities.
- *
- * @package    local_submissionaudit
- * @copyright  2026 Vitalii Kuzmyn <vitalis.qw@gmail.com>
- * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
- */
-
 use local_submissionaudit\lib\application\security\abstract_permission;
 
 /**
  * Subclasses map actions to capability checks in can(); has() wraps has_capability()
  * for the permission's user and context.
+ *
+ * @package    local_submissionaudit
+ * @copyright  2026 Vitalii Kuzmyn <vitalis.qw@gmail.com>
+ * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 abstract class capability_permission extends abstract_permission {
     /**
+     * Constructor.
+     *
      * @param int $userid
      * @param \core\context $context
      */
-    public function __construct(int $userid, protected readonly \core\context $context) {
+    public function __construct(
+        int $userid,
+        /** @var \core\context Context. */
+        protected readonly \core\context $context,
+    ) {
         parent::__construct($userid);
     }
 
     /**
+     * Has.
+     *
      * @param string $capability
      * @param \core\context|null $context Defaults to the permission's context.
      * @return bool
@@ -51,6 +55,8 @@ abstract class capability_permission extends abstract_permission {
     }
 
     /**
+     * Get context.
+     *
      * @return \core\context
      */
     final public function get_context(): \core\context {

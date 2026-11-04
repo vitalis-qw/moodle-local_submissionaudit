@@ -18,38 +18,49 @@ declare(strict_types=1);
 
 namespace local_submissionaudit\lib\application\security;
 
-/**
- * What a user wants to do to a resource.
- *
- * @package    local_submissionaudit
- * @copyright  2026 Vitalii Kuzmyn <vitalis.qw@gmail.com>
- * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
- */
-
 use local_submissionaudit\lib\domain\model\value_object_interface;
 
 /**
  * Value object: "view@audit_report". Plugins declare their actions as constants or
  * static constructors on a final class.
+ *
+ * @package    local_submissionaudit
+ * @copyright  2026 Vitalii Kuzmyn <vitalis.qw@gmail.com>
+ * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-final readonly class action implements value_object_interface, \Stringable {
+final class action implements \Stringable, value_object_interface {
     /**
+     * Constructor.
+     *
      * @param string $name Verb, e.g. "view", "run".
      * @param string $resource Resource type, e.g. "audit_report".
      */
     public function __construct(
-        public string $name,
-        public string $resource,
+        /** @var string Verb, e.g. "view", "run". */
+        public readonly string $name,
+        /** @var string Resource type, e.g. "audit_report". */
+        public readonly string $resource,
     ) {
         if ($name === '' || $resource === '') {
             throw new \InvalidArgumentException('An action needs both a name and a resource');
         }
     }
 
+    /**
+     * Equals.
+     *
+     * @param value_object_interface $other Other.
+     * @return bool
+     */
     public function equals(value_object_interface $other): bool {
         return $other instanceof self && $other->name === $this->name && $other->resource === $this->resource;
     }
 
+    /**
+     * String form.
+     *
+     * @return string
+     */
     public function __toString(): string {
         return "{$this->name}@{$this->resource}";
     }

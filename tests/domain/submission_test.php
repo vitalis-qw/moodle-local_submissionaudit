@@ -16,26 +16,34 @@
 
 declare(strict_types=1);
 
-/**
- * Tests for the submission entity.
- *
- * @package    local_submissionaudit
- * @copyright  2026 Vitalii Kuzmyn <vitalis.qw@gmail.com>
- * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
- */
-
 namespace local_submissionaudit\domain;
 
 use local_submissionaudit\domain\model\submission;
 
 /**
+ * Tests for the submission entity.
+ *
  * @covers \local_submissionaudit\domain\model\submission
+ *
+ * @package    local_submissionaudit
+ * @copyright  2026 Vitalii Kuzmyn <vitalis.qw@gmail.com>
+ * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 final class submission_test extends \basic_testcase {
+    /**
+     * Submission.
+     *
+     * @param string $text Text.
+     * @param array $files Files.
+     * @return submission
+     */
     private function submission(string $text, array $files = []): submission {
         return new submission(1, 2, 3, $text, $files);
     }
 
+    /**
+     * Test: word count strips html and counts unicode.
+     */
     public function test_word_count_strips_html_and_counts_unicode(): void {
         $this->assertSame(0, $this->submission('')->word_count());
         $this->assertSame(0, $this->submission('<p>&nbsp;</p>')->word_count());
@@ -43,6 +51,9 @@ final class submission_test extends \basic_testcase {
         $this->assertSame(4, $this->submission("Ім'я naïve don't 42")->word_count());
     }
 
+    /**
+     * Test: file extensions are lower case without dot.
+     */
     public function test_file_extensions_are_lower_case_without_dot(): void {
         $this->assertSame(['pdf', 'docx', ''], $this->submission('', ['a.PDF', 'b.c.docx', 'README'])->file_extensions());
         $this->assertSame(1, $this->submission('', ['a.pdf'])->get_id());

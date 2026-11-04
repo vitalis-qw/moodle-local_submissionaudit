@@ -19,35 +19,48 @@ declare(strict_types=1);
 namespace local_submissionaudit\event;
 
 /**
- * Moodle event: a submission has been audited.
- *
- * @package    local_submissionaudit
- * @copyright  2026 Vitalii Kuzmyn <vitalis.qw@gmail.com>
- * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
- */
-
-/**
  * Fired after the results are stored; logged in the assignment context.
  *
  * @property-read array $other {
  *      int failures Number of failing checks.
  * }
+ *
+ * @package    local_submissionaudit
+ * @copyright  2026 Vitalii Kuzmyn <vitalis.qw@gmail.com>
+ * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 final class audit_completed extends \core\event\base {
+    /**
+     * Init.
+     */
     protected function init(): void {
         $this->data['crud'] = 'c';
         $this->data['edulevel'] = self::LEVEL_OTHER;
         $this->data['objecttable'] = 'assign_submission';
     }
 
+    /**
+     * Get name.
+     *
+     * @return string
+     */
     public static function get_name(): string {
         return get_string('event:audit_completed', 'local_submissionaudit');
     }
 
+    /**
+     * Get description.
+     *
+     * @return string
+     */
     public function get_description(): string {
-        return "Submission {$this->objectid} of user {$this->relateduserid} was audited: {$this->other['failures']} failing check(s).";
+        return "Submission {$this->objectid} of user {$this->relateduserid} was audited: "
+            . "{$this->other['failures']} failing check(s).";
     }
 
+    /**
+     * Validate data.
+     */
     protected function validate_data(): void {
         parent::validate_data();
         if (!isset($this->other['failures'])) {

@@ -19,16 +19,12 @@ declare(strict_types=1);
 namespace local_submissionaudit\lib\infrastructure\persistence;
 
 /**
- * Collects named SQL parameters with unique names.
+ * Each query gets its own bag, so parameter names never clash and no global counter
+ * is needed.
  *
  * @package    local_submissionaudit
  * @copyright  2026 Vitalii Kuzmyn <vitalis.qw@gmail.com>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
- */
-
-/**
- * Each query gets its own bag, so parameter names never clash and no global counter
- * is needed.
  */
 final class parameter_bag {
     /** @var array<string, mixed> */
@@ -66,6 +62,8 @@ final class parameter_bag {
     }
 
     /**
+     * All.
+     *
      * @return array<string, mixed>
      */
     public function all(): array {

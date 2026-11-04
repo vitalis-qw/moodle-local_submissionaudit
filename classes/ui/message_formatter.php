@@ -25,9 +25,10 @@ namespace local_submissionaudit\ui;
  * @copyright  2026 Vitalii Kuzmyn <vitalis.qw@gmail.com>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-
 final class message_formatter {
     /**
+     * Format.
+     *
      * @param string $key Language string key without the component.
      * @param array<string, scalar> $params
      * @return string Escaped, ready for output.

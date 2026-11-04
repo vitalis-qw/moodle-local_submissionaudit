@@ -18,14 +18,6 @@ declare(strict_types=1);
 
 namespace local_submissionaudit\lib\testing;
 
-/**
- * Array-backed repository for application tests.
- *
- * @package    local_submissionaudit
- * @copyright  2026 Vitalii Kuzmyn <vitalis.qw@gmail.com>
- * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
- */
-
 use local_submissionaudit\lib\domain\exception\not_found_exception;
 use local_submissionaudit\lib\domain\model\aggregate_root;
 use local_submissionaudit\lib\domain\model\entity_interface;
@@ -34,11 +26,12 @@ use local_submissionaudit\lib\domain\repository\repository_interface;
 /**
  * Subclasses implement with_id() because entities decide how an id is assigned.
  *
- * @template E of entity_interface
- * @implements repository_interface<E>
+ * @package    local_submissionaudit
+ * @copyright  2026 Vitalii Kuzmyn <vitalis.qw@gmail.com>
+ * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 abstract class in_memory_repository implements repository_interface {
-    /** @var array<int, E> */
+    /** @var array<int, entity_interface> */
     protected array $items = [];
 
     /** @var int */
@@ -47,20 +40,38 @@ abstract class in_memory_repository implements repository_interface {
     /**
      * Return a copy of the entity carrying the given id.
      *
-     * @param E $entity
+     * @param entity_interface $entity
      * @param int $id
-     * @return E
+     * @return entity_interface
      */
     abstract protected function with_id(entity_interface $entity, int $id): entity_interface;
 
+    /**
+     * Find.
+     *
+     * @param int $id Id.
+     * @return ?entity_interface
+     */
     public function find(int $id): ?entity_interface {
         return $this->items[$id] ?? null;
     }
 
+    /**
+     * Get.
+     *
+     * @param int $id Id.
+     * @return entity_interface
+     */
     public function get(int $id): entity_interface {
         return $this->items[$id] ?? throw not_found_exception::for(static::class, $id);
     }
 
+    /**
+     * Save.
+     *
+     * @param entity_interface $entity Entity.
+     * @return entity_interface
+     */
     public function save(entity_interface $entity): entity_interface {
         $id = $entity->get_id() ?? $this->nextid++;
         $saved = $entity->get_id() === null ? $this->with_id($entity, $id) : $entity;
@@ -71,12 +82,19 @@ abstract class in_memory_repository implements repository_interface {
         return $saved;
     }
 
+    /**
+     * Delete.
+     *
+     * @param entity_interface $entity Entity.
+     */
     public function delete(entity_interface $entity): void {
         unset($this->items[$entity->get_id() ?? -1]);
     }
 
     /**
-     * @return E[]
+     * All.
+     *
+     * @return entity_interface[]
      */
     public function all(): array {
         return array_values($this->items);

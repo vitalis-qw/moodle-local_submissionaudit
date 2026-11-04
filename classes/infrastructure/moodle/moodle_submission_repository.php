@@ -18,6 +18,10 @@ declare(strict_types=1);
 
 namespace local_submissionaudit\infrastructure\moodle;
 
+use local_submissionaudit\application\factory\submission_factory_interface;
+use local_submissionaudit\domain\model\submission;
+use local_submissionaudit\domain\port\submission_repository_interface;
+
 /**
  * Adapter: assign_submission + onlinetext + file area → submission.
  *
@@ -25,22 +29,27 @@ namespace local_submissionaudit\infrastructure\moodle;
  * @copyright  2026 Vitalii Kuzmyn <vitalis.qw@gmail.com>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-
-use local_submissionaudit\application\factory\submission_factory_interface;
-use local_submissionaudit\domain\model\submission;
-use local_submissionaudit\domain\port\submission_repository_interface;
-
 final class moodle_submission_repository implements submission_repository_interface {
     /**
+     * Constructor.
+     *
      * @param \moodle_database $db
      * @param submission_factory_interface $factory
      */
     public function __construct(
+        /** @var \moodle_database Db. */
         private readonly \moodle_database $db,
+        /** @var submission_factory_interface Factory. */
         private readonly submission_factory_interface $factory,
     ) {
     }
 
+    /**
+     * Find.
+     *
+     * @param int $submissionid Submissionid.
+     * @return ?submission
+     */
     public function find(int $submissionid): ?submission {
         $record = $this->db->get_record('assign_submission', ['id' => $submissionid]);
         if (!$record) {

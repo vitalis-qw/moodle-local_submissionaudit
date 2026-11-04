@@ -18,6 +18,8 @@ declare(strict_types=1);
 
 namespace local_submissionaudit\application\factory;
 
+use local_submissionaudit\domain\model\submission;
+
 /**
  * Builds submissions.
  *
@@ -25,11 +27,10 @@ namespace local_submissionaudit\application\factory;
  * @copyright  2026 Vitalii Kuzmyn <vitalis.qw@gmail.com>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-
-use local_submissionaudit\domain\model\submission;
-
 interface submission_factory_interface {
     /**
+     * Create.
+     *
      * @param int $id
      * @param int $assignid
      * @param int $userid

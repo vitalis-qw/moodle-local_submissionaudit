@@ -16,15 +16,9 @@
 
 declare(strict_types=1);
 
-/**
- * Tests for the Moodle-facing adapters.
- *
- * @package    local_submissionaudit
- * @copyright  2026 Vitalii Kuzmyn <vitalis.qw@gmail.com>
- * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
- */
-
 namespace local_submissionaudit\infrastructure;
+
+defined('MOODLE_INTERNAL') || die();
 
 require_once(__DIR__ . '/../fixtures/fixtures.php');
 
@@ -45,16 +39,25 @@ use local_submissionaudit\lib\application\security\access_denied_exception;
 use local_submissionaudit\lib\infrastructure\config\plugin_config;
 
 /**
+ * Tests for the Moodle-facing adapters.
+ *
  * @covers \local_submissionaudit\infrastructure\moodle\moodle_submission_repository
  * @covers \local_submissionaudit\infrastructure\moodle\moodle_user_directory
  * @covers \local_submissionaudit\infrastructure\moodle\settings_check_factory
  * @covers \local_submissionaudit\infrastructure\config\settings
  * @covers \local_submissionaudit\infrastructure\security\audit_permission_factory
  * @covers \local_submissionaudit\infrastructure\security\capability_audit_permission
+ *
+ * @package    local_submissionaudit
+ * @copyright  2026 Vitalii Kuzmyn <vitalis.qw@gmail.com>
+ * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 final class moodle_adapters_test extends \advanced_testcase {
     use assign_fixture_trait;
 
+    /**
+     * Test: submission repository loads text and files.
+     */
     public function test_submission_repository_loads_text_and_files(): void {
         global $DB;
         $this->resetAfterTest();
@@ -72,6 +75,9 @@ final class moodle_adapters_test extends \advanced_testcase {
         $this->assertNull($repo->find(999999));
     }
 
+    /**
+     * Test: user directory returns full names.
+     */
     public function test_user_directory_returns_full_names(): void {
         $this->resetAfterTest();
         $user = $this->getDataGenerator()->create_user(['firstname' => 'Ann', 'lastname' => 'Tutor']);
@@ -80,6 +86,9 @@ final class moodle_adapters_test extends \advanced_testcase {
         $this->assertSame([], (new moodle_user_directory($this->db()))->names([]));
     }
 
+    /**
+     * Test: check factory follows settings.
+     */
     public function test_check_factory_follows_settings(): void {
         $this->resetAfterTest();
         $settings = new settings(new plugin_config('local_submissionaudit'));
@@ -101,6 +110,9 @@ final class moodle_adapters_test extends \advanced_testcase {
         $this->assertSame(['pdf', 'docx'], $settings->allowed_file_types());
     }
 
+    /**
+     * Test: permission follows the capability.
+     */
     public function test_permission_follows_the_capability(): void {
         $this->resetAfterTest();
         [$course, $assign, , $student] = $this->create_submission('x');
@@ -115,6 +127,11 @@ final class moodle_adapters_test extends \advanced_testcase {
         $factory->for_module((int) $assign->cmid, (int) $student->id)->require(audit_action::view_report());
     }
 
+    /**
+     * Db.
+     *
+     * @return \moodle_database
+     */
     private function db(): \moodle_database {
         global $DB;
         return $DB;

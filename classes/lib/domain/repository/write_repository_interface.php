@@ -18,6 +18,8 @@ declare(strict_types=1);
 
 namespace local_submissionaudit\lib\domain\repository;
 
+use local_submissionaudit\lib\domain\model\entity_interface;
+
 /**
  * Port: persist entities.
  *
@@ -25,23 +27,19 @@ namespace local_submissionaudit\lib\domain\repository;
  * @copyright  2026 Vitalii Kuzmyn <vitalis.qw@gmail.com>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-
-use local_submissionaudit\lib\domain\model\entity_interface;
-
-/**
- * @template T of entity_interface
- */
 interface write_repository_interface {
     /**
      * Insert or update. Returns the persisted instance (with an id).
      *
-     * @param T $entity
-     * @return T
+     * @param entity_interface $entity
+     * @return entity_interface
      */
     public function save(entity_interface $entity): entity_interface;
 
     /**
-     * @param T $entity
+     * Delete.
+     *
+     * @param entity_interface $entity
      */
     public function delete(entity_interface $entity): void;
 }

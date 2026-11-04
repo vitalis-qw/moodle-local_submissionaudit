@@ -19,24 +19,24 @@ declare(strict_types=1);
 namespace local_submissionaudit\lib\ui\request;
 
 /**
- * Typed, cleaned HTTP input.
+ * Built from an array (testable) or from the globals (one place only).
  *
  * @package    local_submissionaudit
  * @copyright  2026 Vitalii Kuzmyn <vitalis.qw@gmail.com>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-
-/**
- * Built from an array (testable) or from the globals (one place only).
- */
 interface request_interface {
     /**
+     * From array.
+     *
      * @param array<string, mixed> $input Raw values; cleaned by the implementation.
      * @return static
      */
     public static function from_array(array $input): static;
 
     /**
+     * From globals.
+     *
      * @return static
      */
     public static function from_globals(): static;

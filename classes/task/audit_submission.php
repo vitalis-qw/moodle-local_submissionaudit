@@ -18,26 +18,30 @@ declare(strict_types=1);
 
 namespace local_submissionaudit\task;
 
-/**
- * Ad-hoc task: audit one submission in the background.
- *
- * @package    local_submissionaudit
- * @copyright  2026 Vitalii Kuzmyn <vitalis.qw@gmail.com>
- * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
- */
-
 use local_submissionaudit\application\dto\audit_request;
 use local_submissionaudit\application\service\audit_service_interface;
 use local_submissionaudit\infrastructure\config\settings;
 
 /**
  * Thin by design: fetches the use case from the container and hands over.
+ *
+ * @package    local_submissionaudit
+ * @copyright  2026 Vitalii Kuzmyn <vitalis.qw@gmail.com>
+ * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 final class audit_submission extends \core\task\adhoc_task {
+    /**
+     * Get name.
+     *
+     * @return string
+     */
     public function get_name(): string {
         return get_string('task:audit_submission', 'local_submissionaudit');
     }
 
+    /**
+     * Execute.
+     */
     public function execute(): void {
         if (!\core\di::get(settings::class)->enabled()) {
             return;

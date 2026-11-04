@@ -29,5 +29,7 @@ use local_submissionaudit\ui\request\report_request;
 
 require(__DIR__ . '/../../config.php');
 
+require_login();
+
 $request = report_request::from_globals();
 \core\di::get(report_controller_interface::class)->handle($request)->send();

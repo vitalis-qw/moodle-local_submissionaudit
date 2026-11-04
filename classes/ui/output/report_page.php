@@ -18,39 +18,48 @@ declare(strict_types=1);
 
 namespace local_submissionaudit\ui\output;
 
-/**
- * Renderable: the report table.
- *
- * @package    local_submissionaudit
- * @copyright  2026 Vitalii Kuzmyn <vitalis.qw@gmail.com>
- * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
- */
-
 use local_submissionaudit\application\dto\audit_report;
 use local_submissionaudit\application\dto\check_result;
 use local_submissionaudit\ui\message_formatter;
 
 /**
  * Rendered with templates/report_page.mustache.
+ *
+ * @package    local_submissionaudit
+ * @copyright  2026 Vitalii Kuzmyn <vitalis.qw@gmail.com>
+ * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 final class report_page implements \renderable, \templatable {
     /** @var array<string, string> */
+    /** @var array Badges. */
     private const BADGES = ['pass' => 'badge bg-success', 'fail' => 'badge bg-danger', 'error' => 'badge bg-warning text-dark'];
 
     /**
+     * Constructor.
+     *
      * @param string $title
      * @param int $courseid
      * @param audit_report[] $reports
      * @param array<int, string> $names userid => display name.
      */
     public function __construct(
+        /** @var string Title. */
         private readonly string $title,
+        /** @var int Courseid. */
         private readonly int $courseid,
+        /** @var audit_report[] Reports. */
         private readonly array $reports,
+        /** @var array Names. */
         private readonly array $names,
     ) {
     }
 
+    /**
+     * Export for template.
+     *
+     * @param \renderer_base $output Output.
+     * @return \stdClass
+     */
     public function export_for_template(\renderer_base $output): \stdClass {
         $rows = [];
         foreach ($this->reports as $report) {
@@ -67,6 +76,8 @@ final class report_page implements \renderable, \templatable {
     }
 
     /**
+     * Row.
+     *
      * @param audit_report $report
      * @param check_result $result
      * @return \stdClass

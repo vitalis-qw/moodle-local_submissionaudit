@@ -19,15 +19,11 @@ declare(strict_types=1);
 namespace local_submissionaudit\lib\domain\exception;
 
 /**
- * Base domain exception.
+ * Pure PHP: the domain never throws moodle_exception. The ui layer translates.
  *
  * @package    local_submissionaudit
  * @copyright  2026 Vitalii Kuzmyn <vitalis.qw@gmail.com>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
- */
-
-/**
- * Pure PHP: the domain never throws moodle_exception. The ui layer translates.
  */
 class domain_exception extends \RuntimeException {
 }

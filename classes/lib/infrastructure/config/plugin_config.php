@@ -19,25 +19,28 @@ declare(strict_types=1);
 namespace local_submissionaudit\lib\infrastructure\config;
 
 /**
- * Typed access to get_config().
+ * Inject one per plugin (bind it in the service provider with the component name)
+ * instead of calling get_config() inside services.
  *
  * @package    local_submissionaudit
  * @copyright  2026 Vitalii Kuzmyn <vitalis.qw@gmail.com>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-
-/**
- * Inject one per plugin (bind it in the service provider with the component name)
- * instead of calling get_config() inside services.
- */
 class plugin_config {
     /**
+     * Constructor.
+     *
      * @param string $component Frankenstyle name, e.g. "local_example".
      */
-    public function __construct(private readonly string $component) {
+    public function __construct(
+        /** @var string Frankenstyle name, e.g. "local_example". */
+        private readonly string $component,
+    ) {
     }
 
     /**
+     * String.
+     *
      * @param string $name
      * @param string $default
      * @return string
@@ -48,6 +51,8 @@ class plugin_config {
     }
 
     /**
+     * Int.
+     *
      * @param string $name
      * @param int $default
      * @return int
@@ -58,6 +63,8 @@ class plugin_config {
     }
 
     /**
+     * Bool.
+     *
      * @param string $name
      * @param bool $default
      * @return bool
@@ -83,6 +90,8 @@ class plugin_config {
     }
 
     /**
+     * Component.
+     *
      * @return string
      */
     public function component(): string {

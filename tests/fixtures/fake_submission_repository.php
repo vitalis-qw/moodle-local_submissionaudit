@@ -16,6 +16,11 @@
 
 declare(strict_types=1);
 
+namespace local_submissionaudit\fixtures;
+
+use local_submissionaudit\domain\model\submission;
+use local_submissionaudit\domain\port\submission_repository_interface;
+
 /**
  * Submissions held in an array.
  *
@@ -23,21 +28,27 @@ declare(strict_types=1);
  * @copyright  2026 Vitalii Kuzmyn <vitalis.qw@gmail.com>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-
-namespace local_submissionaudit\fixtures;
-
-use local_submissionaudit\domain\model\submission;
-use local_submissionaudit\domain\port\submission_repository_interface;
-
 final class fake_submission_repository implements submission_repository_interface {
     /** @var array<int, submission> */
     private array $items = [];
 
+    /**
+     * Add.
+     *
+     * @param submission $submission Submission.
+     * @return self
+     */
     public function add(submission $submission): self {
         $this->items[(int) $submission->get_id()] = $submission;
         return $this;
     }
 
+    /**
+     * Find.
+     *
+     * @param int $submissionid Submissionid.
+     * @return ?submission
+     */
     public function find(int $submissionid): ?submission {
         return $this->items[$submissionid] ?? null;
     }

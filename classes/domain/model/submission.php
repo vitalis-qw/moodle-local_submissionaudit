@@ -18,22 +18,20 @@ declare(strict_types=1);
 
 namespace local_submissionaudit\domain\model;
 
-/**
- * What the checks look at: a submission reduced to plain data.
- *
- * @package    local_submissionaudit
- * @copyright  2026 Vitalii Kuzmyn <vitalis.qw@gmail.com>
- * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
- */
-
 use local_submissionaudit\lib\domain\model\entity_interface;
 
 /**
  * Identified by the assign_submission id. Free of Moodle: no $DB, no stored_file,
  * no context. Built by {@see \local_submissionaudit\application\factory\submission_factory_interface}.
+ *
+ * @package    local_submissionaudit
+ * @copyright  2026 Vitalii Kuzmyn <vitalis.qw@gmail.com>
+ * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 final class submission implements entity_interface {
     /**
+     * Constructor.
+     *
      * @param int $id assign_submission id.
      * @param int $assignid Assignment instance id.
      * @param int $userid Student id.
@@ -41,19 +39,31 @@ final class submission implements entity_interface {
      * @param string[] $filenames Names of the submitted files.
      */
     public function __construct(
+        /** @var int assign_submission id. */
         private readonly int $id,
+        /** @var int Assignment instance id. */
         private readonly int $assignid,
+        /** @var int Student id. */
         private readonly int $userid,
+        /** @var string Online text as stored (may contain HTML). */
         private readonly string $text,
+        /** @var string[] Names of the submitted files. */
         private readonly array $filenames,
     ) {
     }
 
+    /**
+     * Get id.
+     *
+     * @return ?int
+     */
     public function get_id(): ?int {
         return $this->id;
     }
 
     /**
+     * Assignid.
+     *
      * @return int
      */
     public function assignid(): int {
@@ -61,6 +71,8 @@ final class submission implements entity_interface {
     }
 
     /**
+     * Userid.
+     *
      * @return int
      */
     public function userid(): int {
@@ -68,6 +80,8 @@ final class submission implements entity_interface {
     }
 
     /**
+     * Filenames.
+     *
      * @return string[]
      */
     public function filenames(): array {

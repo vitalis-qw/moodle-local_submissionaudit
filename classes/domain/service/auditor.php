@@ -18,6 +18,10 @@ declare(strict_types=1);
 
 namespace local_submissionaudit\domain\service;
 
+use local_submissionaudit\domain\model\result;
+use local_submissionaudit\domain\model\submission;
+use local_submissionaudit\domain\port\check_factory_interface;
+
 /**
  * Runs every check and never lets one broken check hide the others.
  *
@@ -25,18 +29,24 @@ namespace local_submissionaudit\domain\service;
  * @copyright  2026 Vitalii Kuzmyn <vitalis.qw@gmail.com>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-
-use local_submissionaudit\domain\model\result;
-use local_submissionaudit\domain\model\submission;
-use local_submissionaudit\domain\port\check_factory_interface;
-
 final class auditor implements auditor_interface {
     /**
+     * Constructor.
+     *
      * @param check_factory_interface $checks
      */
-    public function __construct(private readonly check_factory_interface $checks) {
+    public function __construct(
+        /** @var check_factory_interface Checks. */
+        private readonly check_factory_interface $checks,
+    ) {
     }
 
+    /**
+     * Audit.
+     *
+     * @param submission $submission Submission.
+     * @return array
+     */
     public function audit(submission $submission): array {
         $results = [];
         foreach ($this->checks->checks() as $check) {

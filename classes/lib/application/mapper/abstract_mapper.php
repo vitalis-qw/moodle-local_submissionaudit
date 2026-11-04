@@ -18,29 +18,33 @@ declare(strict_types=1);
 
 namespace local_submissionaudit\lib\application\mapper;
 
-/**
- * Base mapper: collections for free.
- *
- * @package    local_submissionaudit
- * @copyright  2026 Vitalii Kuzmyn <vitalis.qw@gmail.com>
- * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
- */
-
 use local_submissionaudit\lib\application\dto\dto_interface;
 use local_submissionaudit\lib\domain\model\entity_interface;
 
 /**
  * Implement to_dto(); override to_entity() when the DTO carries enough to rebuild the entity.
  *
- * @template E of entity_interface
- * @template D of dto_interface
- * @implements mapper_interface<E, D>
+ * @package    local_submissionaudit
+ * @copyright  2026 Vitalii Kuzmyn <vitalis.qw@gmail.com>
+ * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 abstract class abstract_mapper implements mapper_interface {
+    /**
+     * To entity.
+     *
+     * @param dto_interface $dto Dto.
+     * @return entity_interface
+     */
     public function to_entity(dto_interface $dto): entity_interface {
         throw new \LogicException(sprintf('%s does not map DTOs back to entities', static::class));
     }
 
+    /**
+     * To dto collection.
+     *
+     * @param iterable $entities Entities.
+     * @return array
+     */
     final public function to_dto_collection(iterable $entities): array {
         $out = [];
         foreach ($entities as $entity) {
@@ -49,6 +53,12 @@ abstract class abstract_mapper implements mapper_interface {
         return $out;
     }
 
+    /**
+     * To entity collection.
+     *
+     * @param iterable $dtos Dtos.
+     * @return array
+     */
     final public function to_entity_collection(iterable $dtos): array {
         $out = [];
         foreach ($dtos as $dto) {
@@ -57,6 +67,12 @@ abstract class abstract_mapper implements mapper_interface {
         return $out;
     }
 
+    /**
+     * To array collection.
+     *
+     * @param iterable $entities Entities.
+     * @return array
+     */
     final public function to_array_collection(iterable $entities): array {
         $out = [];
         foreach ($entities as $entity) {

@@ -19,18 +19,16 @@ declare(strict_types=1);
 namespace local_submissionaudit\lib\domain\model;
 
 /**
- * An immutable object compared by value.
+ * Immutable, compared by its attributes. Implement as a final readonly class.
  *
  * @package    local_submissionaudit
  * @copyright  2026 Vitalii Kuzmyn <vitalis.qw@gmail.com>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-
-/**
- * Immutable, compared by its attributes. Implement as a final readonly class.
- */
 interface value_object_interface {
     /**
+     * Equals.
+     *
      * @param value_object_interface $other
      * @return bool
      */

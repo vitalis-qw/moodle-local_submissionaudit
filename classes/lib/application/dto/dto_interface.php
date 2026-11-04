@@ -19,24 +19,24 @@ declare(strict_types=1);
 namespace local_submissionaudit\lib\application\dto;
 
 /**
- * Data carried across layer boundaries.
+ * A DTO has public readonly scalars/arrays/other DTOs, no behaviour, no identity.
  *
  * @package    local_submissionaudit
  * @copyright  2026 Vitalii Kuzmyn <vitalis.qw@gmail.com>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-
-/**
- * A DTO has public readonly scalars/arrays/other DTOs, no behaviour, no identity.
- */
 interface dto_interface {
     /**
+     * From array.
+     *
      * @param array<string, mixed> $data
      * @return static
      */
     public static function from_array(array $data): static;
 
     /**
+     * To array.
+     *
      * @return array<string, mixed>
      */
     public function to_array(): array;

@@ -18,20 +18,16 @@ declare(strict_types=1);
 
 namespace local_submissionaudit\application\mapper;
 
+use local_submissionaudit\application\dto\audit_report;
+use local_submissionaudit\domain\model\audit;
+use local_submissionaudit\lib\application\mapper\mapper_interface;
+
 /**
  * Maps audits to report DTOs.
  *
  * @package    local_submissionaudit
  * @copyright  2026 Vitalii Kuzmyn <vitalis.qw@gmail.com>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
- */
-
-use local_submissionaudit\application\dto\audit_report;
-use local_submissionaudit\domain\model\audit;
-use local_submissionaudit\lib\application\mapper\mapper_interface;
-
-/**
- * @extends mapper_interface<audit, audit_report>
  */
 interface audit_mapper_interface extends mapper_interface {
 }

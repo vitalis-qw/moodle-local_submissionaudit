@@ -19,19 +19,17 @@ declare(strict_types=1);
 namespace local_submissionaudit\lib\domain\event;
 
 /**
- * Port: publish domain events.
+ * Outgoing port. The infrastructure adapter decides what "publish" means
+ * (Moodle events, a queue, nothing in tests).
  *
  * @package    local_submissionaudit
  * @copyright  2026 Vitalii Kuzmyn <vitalis.qw@gmail.com>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-
-/**
- * Outgoing port. The infrastructure adapter decides what "publish" means
- * (Moodle events, a queue, nothing in tests).
- */
 interface event_publisher_interface {
     /**
+     * Publish.
+     *
      * @param domain_event_interface ...$events
      */
     public function publish(domain_event_interface ...$events): void;

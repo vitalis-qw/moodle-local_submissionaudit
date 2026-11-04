@@ -18,6 +18,9 @@ declare(strict_types=1);
 
 namespace local_submissionaudit\application\factory;
 
+use local_submissionaudit\domain\model\audit;
+use local_submissionaudit\domain\model\submission;
+
 /**
  * Builds audits.
  *
@@ -25,15 +28,29 @@ namespace local_submissionaudit\application\factory;
  * @copyright  2026 Vitalii Kuzmyn <vitalis.qw@gmail.com>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-
-use local_submissionaudit\domain\model\audit;
-use local_submissionaudit\domain\model\submission;
-
 final class audit_factory implements audit_factory_interface {
+    /**
+     * Completed.
+     *
+     * @param submission $submission Submission.
+     * @param array $results Results.
+     * @param int $now Now.
+     * @return audit
+     */
     public function completed(submission $submission, array $results, int $now): audit {
         return audit::completed($submission, $results, $now);
     }
 
+    /**
+     * Restore.
+     *
+     * @param int $submissionid Submissionid.
+     * @param int $assignid Assignid.
+     * @param int $userid Userid.
+     * @param array $results Results.
+     * @param int $timecreated Timecreated.
+     * @return audit
+     */
     public function restore(int $submissionid, int $assignid, int $userid, array $results, int $timecreated): audit {
         return audit::restore($submissionid, $assignid, $userid, $results, $timecreated);
     }

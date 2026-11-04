@@ -18,6 +18,8 @@ declare(strict_types=1);
 
 namespace local_submissionaudit\domain\port;
 
+use local_submissionaudit\domain\check\check_interface;
+
 /**
  * Port: where the configured checks come from.
  *
@@ -25,11 +27,10 @@ namespace local_submissionaudit\domain\port;
  * @copyright  2026 Vitalii Kuzmyn <vitalis.qw@gmail.com>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-
-use local_submissionaudit\domain\check\check_interface;
-
 interface check_factory_interface {
     /**
+     * Checks.
+     *
      * @return check_interface[] Checks in the order they should run; empty when none is configured.
      */
     public function checks(): array;

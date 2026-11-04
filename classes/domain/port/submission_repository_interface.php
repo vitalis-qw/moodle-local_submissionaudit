@@ -18,6 +18,8 @@ declare(strict_types=1);
 
 namespace local_submissionaudit\domain\port;
 
+use local_submissionaudit\domain\model\submission;
+
 /**
  * Port: where submissions come from.
  *
@@ -25,11 +27,10 @@ namespace local_submissionaudit\domain\port;
  * @copyright  2026 Vitalii Kuzmyn <vitalis.qw@gmail.com>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-
-use local_submissionaudit\domain\model\submission;
-
 interface submission_repository_interface {
     /**
+     * Find.
+     *
      * @param int $submissionid
      * @return submission|null Null when it does not exist any more.
      */

@@ -19,15 +19,11 @@ declare(strict_types=1);
 namespace local_submissionaudit\lib\domain\event;
 
 /**
- * Something that happened in the domain.
+ * A fact, named in past tense, with the data a listener needs.
  *
  * @package    local_submissionaudit
  * @copyright  2026 Vitalii Kuzmyn <vitalis.qw@gmail.com>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
- */
-
-/**
- * A fact, named in past tense, with the data a listener needs.
  */
 interface domain_event_interface {
     /**

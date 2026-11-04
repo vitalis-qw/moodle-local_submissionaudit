@@ -18,14 +18,6 @@ declare(strict_types=1);
 
 namespace local_submissionaudit\domain\model;
 
-/**
- * Aggregate root: the results of one audit of one submission.
- *
- * @package    local_submissionaudit
- * @copyright  2026 Vitalii Kuzmyn <vitalis.qw@gmail.com>
- * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
- */
-
 use local_submissionaudit\domain\event\audit_completed;
 use local_submissionaudit\lib\domain\model\aggregate_root;
 
@@ -33,9 +25,15 @@ use local_submissionaudit\lib\domain\model\aggregate_root;
  * Identified by the submission id: a submission has at most one current audit, and a
  * new audit replaces the previous one. Built only through
  * {@see \local_submissionaudit\application\factory\audit_factory_interface}.
+ *
+ * @package    local_submissionaudit
+ * @copyright  2026 Vitalii Kuzmyn <vitalis.qw@gmail.com>
+ * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 final class audit extends aggregate_root {
     /**
+     * Constructor.
+     *
      * @param int $submissionid
      * @param int $assignid
      * @param int $userid
@@ -43,10 +41,15 @@ final class audit extends aggregate_root {
      * @param int $timecreated
      */
     private function __construct(
+        /** @var int Submissionid. */
         private readonly int $submissionid,
+        /** @var int Assignid. */
         private readonly int $assignid,
+        /** @var int Userid. */
         private readonly int $userid,
+        /** @var result[] One per check, in configuration order. */
         private readonly array $results,
+        /** @var int Timecreated. */
         private readonly int $timecreated,
     ) {
         foreach ($results as $result) {
@@ -65,7 +68,13 @@ final class audit extends aggregate_root {
      * @return self
      */
     public static function completed(submission $submission, array $results, int $now): self {
-        $audit = new self((int) $submission->get_id(), $submission->assignid(), $submission->userid(), array_values($results), $now);
+        $audit = new self(
+            (int) $submission->get_id(),
+            $submission->assignid(),
+            $submission->userid(),
+            array_values($results),
+            $now,
+        );
         $audit->record(new audit_completed($now, $audit->submissionid, $audit->assignid, $audit->userid, $audit->failure_count()));
         return $audit;
     }
@@ -84,11 +93,18 @@ final class audit extends aggregate_root {
         return new self($submissionid, $assignid, $userid, array_values($results), $timecreated);
     }
 
+    /**
+     * Get id.
+     *
+     * @return ?int
+     */
     public function get_id(): ?int {
         return $this->submissionid;
     }
 
     /**
+     * Submissionid.
+     *
      * @return int
      */
     public function submissionid(): int {
@@ -96,6 +112,8 @@ final class audit extends aggregate_root {
     }
 
     /**
+     * Assignid.
+     *
      * @return int
      */
     public function assignid(): int {
@@ -103,6 +121,8 @@ final class audit extends aggregate_root {
     }
 
     /**
+     * Userid.
+     *
      * @return int
      */
     public function userid(): int {
@@ -110,6 +130,8 @@ final class audit extends aggregate_root {
     }
 
     /**
+     * Results.
+     *
      * @return result[]
      */
     public function results(): array {
@@ -117,6 +139,8 @@ final class audit extends aggregate_root {
     }
 
     /**
+     * Timecreated.
+     *
      * @return int
      */
     public function timecreated(): int {
@@ -124,6 +148,8 @@ final class audit extends aggregate_root {
     }
 
     /**
+     * Failure count.
+     *
      * @return int
      */
     public function failure_count(): int {
@@ -131,6 +157,8 @@ final class audit extends aggregate_root {
     }
 
     /**
+     * Has failures.
+     *
      * @return bool
      */
     public function has_failures(): bool {

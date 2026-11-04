@@ -16,6 +16,10 @@
 
 declare(strict_types=1);
 
+namespace local_submissionaudit\fixtures;
+
+use local_submissionaudit\application\port\user_directory_interface;
+
 /**
  * User names from an array.
  *
@@ -23,18 +27,24 @@ declare(strict_types=1);
  * @copyright  2026 Vitalii Kuzmyn <vitalis.qw@gmail.com>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-
-namespace local_submissionaudit\fixtures;
-
-use local_submissionaudit\application\port\user_directory_interface;
-
 final class fake_user_directory implements user_directory_interface {
     /**
+     * Constructor.
+     *
      * @param array<int, string> $names
      */
-    public function __construct(private readonly array $names) {
+    public function __construct(
+        /** @var array Names. */
+        private readonly array $names,
+    ) {
     }
 
+    /**
+     * Names.
+     *
+     * @param array $userids Userids.
+     * @return array
+     */
     public function names(array $userids): array {
         return array_intersect_key($this->names, array_flip($userids));
     }

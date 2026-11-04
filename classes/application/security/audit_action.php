@@ -18,6 +18,8 @@ declare(strict_types=1);
 
 namespace local_submissionaudit\application\security;
 
+use local_submissionaudit\lib\application\security\action;
+
 /**
  * The actions of this plugin.
  *
@@ -25,11 +27,9 @@ namespace local_submissionaudit\application\security;
  * @copyright  2026 Vitalii Kuzmyn <vitalis.qw@gmail.com>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-
-use local_submissionaudit\lib\application\security\action;
-
 final class audit_action {
     /** @var string */
+    /** @var string Resource. */
     public const RESOURCE = 'audit';
 
     /**

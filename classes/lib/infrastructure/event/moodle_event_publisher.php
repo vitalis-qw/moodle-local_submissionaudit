@@ -18,14 +18,6 @@ declare(strict_types=1);
 
 namespace local_submissionaudit\lib\infrastructure\event;
 
-/**
- * Publishes domain events as Moodle events.
- *
- * @package    local_submissionaudit
- * @copyright  2026 Vitalii Kuzmyn <vitalis.qw@gmail.com>
- * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
- */
-
 use local_submissionaudit\lib\domain\event\domain_event_interface;
 use local_submissionaudit\lib\domain\event\event_publisher_interface;
 
@@ -38,14 +30,28 @@ use local_submissionaudit\lib\domain\event\event_publisher_interface;
  *     ])
  *
  * An unmapped event is a programming error, not something to swallow.
+ *
+ * @package    local_submissionaudit
+ * @copyright  2026 Vitalii Kuzmyn <vitalis.qw@gmail.com>
+ * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 final class moodle_event_publisher implements event_publisher_interface {
     /**
+     * Constructor.
+     *
      * @param array<class-string<domain_event_interface>, callable(domain_event_interface): \core\event\base> $map
      */
-    public function __construct(private readonly array $map) {
+    public function __construct(
+        /** @var array Map. */
+        private readonly array $map,
+    ) {
     }
 
+    /**
+     * Publish.
+     *
+     * @param domain_event_interface... $events Events.
+     */
     public function publish(domain_event_interface ...$events): void {
         foreach ($events as $event) {
             $factory = $this->map[$event::class] ?? null;

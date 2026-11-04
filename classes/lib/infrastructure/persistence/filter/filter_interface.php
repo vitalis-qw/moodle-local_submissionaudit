@@ -18,22 +18,20 @@ declare(strict_types=1);
 
 namespace local_submissionaudit\lib\infrastructure\persistence\filter;
 
-/**
- * A WHERE fragment.
- *
- * @package    local_submissionaudit
- * @copyright  2026 Vitalii Kuzmyn <vitalis.qw@gmail.com>
- * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
- */
-
 use local_submissionaudit\lib\infrastructure\persistence\parameter_bag;
 
 /**
  * Returns a condition (without WHERE) and registers its values in the bag.
  * An empty string means "no condition".
+ *
+ * @package    local_submissionaudit
+ * @copyright  2026 Vitalii Kuzmyn <vitalis.qw@gmail.com>
+ * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 interface filter_interface {
     /**
+     * Sql.
+     *
      * @param parameter_bag $params
      * @param \moodle_database $db For dialect-specific SQL such as sql_like().
      * @return string

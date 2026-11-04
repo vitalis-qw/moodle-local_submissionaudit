@@ -16,15 +16,9 @@
 
 declare(strict_types=1);
 
-/**
- * Tests for the report use case.
- *
- * @package    local_submissionaudit
- * @copyright  2026 Vitalii Kuzmyn <vitalis.qw@gmail.com>
- * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
- */
-
 namespace local_submissionaudit\application;
+
+defined('MOODLE_INTERNAL') || die();
 
 require_once(__DIR__ . '/../fixtures/fixtures.php');
 
@@ -36,9 +30,18 @@ use local_submissionaudit\fixtures\fake_user_directory;
 use local_submissionaudit\fixtures\in_memory_audit_repository;
 
 /**
+ * Tests for the report use case.
+ *
  * @covers \local_submissionaudit\application\service\report_service
+ *
+ * @package    local_submissionaudit
+ * @copyright  2026 Vitalii Kuzmyn <vitalis.qw@gmail.com>
+ * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 final class report_service_test extends \basic_testcase {
+    /**
+     * Test: for assignment is newest first and names resolve.
+     */
     public function test_for_assignment_is_newest_first_and_names_resolve(): void {
         $audits = new in_memory_audit_repository();
         $audits->save(audit::restore(1, 50, 11, [result::pass('a', 'k')], 100));

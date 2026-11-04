@@ -18,14 +18,6 @@ declare(strict_types=1);
 
 namespace local_submissionaudit\infrastructure\moodle;
 
-/**
- * Adapter: plugin settings → list of checks.
- *
- * @package    local_submissionaudit
- * @copyright  2026 Vitalii Kuzmyn <vitalis.qw@gmail.com>
- * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
- */
-
 use local_submissionaudit\domain\check\allowed_file_types;
 use local_submissionaudit\domain\check\external_verdict;
 use local_submissionaudit\domain\check\minimum_words;
@@ -36,18 +28,31 @@ use local_submissionaudit\infrastructure\config\settings;
 /**
  * The one place that knows both the admin settings and the check constructors.
  * Adding a check means one new class plus one block here.
+ *
+ * @package    local_submissionaudit
+ * @copyright  2026 Vitalii Kuzmyn <vitalis.qw@gmail.com>
+ * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 final class settings_check_factory implements check_factory_interface {
     /**
+     * Constructor.
+     *
      * @param settings $settings
      * @param verdict_client_interface $client
      */
     public function __construct(
+        /** @var settings Settings. */
         private readonly settings $settings,
+        /** @var verdict_client_interface Client. */
         private readonly verdict_client_interface $client,
     ) {
     }
 
+    /**
+     * Checks.
+     *
+     * @return array
+     */
     public function checks(): array {
         $checks = [];
         if ($this->settings->min_words() > 0) {

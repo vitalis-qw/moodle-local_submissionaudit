@@ -25,9 +25,10 @@ namespace local_submissionaudit\application\security;
  * @copyright  2026 Vitalii Kuzmyn <vitalis.qw@gmail.com>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-
 interface audit_permission_factory_interface {
     /**
+     * For module.
+     *
      * @param int $cmid Course module id of the assignment.
      * @param int $userid
      * @return audit_permission_interface

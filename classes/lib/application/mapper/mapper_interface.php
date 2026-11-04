@@ -18,50 +18,53 @@ declare(strict_types=1);
 
 namespace local_submissionaudit\lib\application\mapper;
 
-/**
- * Convert entities to DTOs and back.
- *
- * @package    local_submissionaudit
- * @copyright  2026 Vitalii Kuzmyn <vitalis.qw@gmail.com>
- * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
- */
-
 use local_submissionaudit\lib\application\dto\dto_interface;
 use local_submissionaudit\lib\domain\model\entity_interface;
 
 /**
  * One mapper per aggregate. Mappers are stateless services resolved from the container.
  *
- * @template E of entity_interface
- * @template D of dto_interface
+ * @package    local_submissionaudit
+ * @copyright  2026 Vitalii Kuzmyn <vitalis.qw@gmail.com>
+ * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 interface mapper_interface {
     /**
-     * @param E $entity
-     * @return D
+     * To dto.
+     *
+     * @param entity_interface $entity
+     * @return dto_interface
      */
     public function to_dto(entity_interface $entity): dto_interface;
 
     /**
-     * @param D $dto
-     * @return E
+     * To entity.
+     *
+     * @param dto_interface $dto
+     * @return entity_interface
      */
     public function to_entity(dto_interface $dto): entity_interface;
 
     /**
-     * @param iterable<E> $entities
-     * @return D[]
+     * To dto collection.
+     *
+     * @param iterable $entities
+     * @return dto_interface[]
      */
     public function to_dto_collection(iterable $entities): array;
 
     /**
-     * @param iterable<D> $dtos
-     * @return E[]
+     * To entity collection.
+     *
+     * @param iterable $dtos
+     * @return entity_interface[]
      */
     public function to_entity_collection(iterable $dtos): array;
 
     /**
-     * @param iterable<E> $entities
+     * To array collection.
+     *
+     * @param iterable $entities
      * @return array<int, array<string, mixed>>
      */
     public function to_array_collection(iterable $entities): array;

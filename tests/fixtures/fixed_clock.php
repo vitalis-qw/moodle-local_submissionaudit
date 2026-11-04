@@ -16,6 +16,10 @@
 
 declare(strict_types=1);
 
+namespace local_submissionaudit\fixtures;
+
+use Psr\Clock\ClockInterface;
+
 /**
  * Clock that always answers the same time.
  *
@@ -23,15 +27,23 @@ declare(strict_types=1);
  * @copyright  2026 Vitalii Kuzmyn <vitalis.qw@gmail.com>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-
-namespace local_submissionaudit\fixtures;
-
-use Psr\Clock\ClockInterface;
-
 final class fixed_clock implements ClockInterface {
-    public function __construct(private readonly int $timestamp) {
+    /**
+     * Constructor.
+     *
+     * @param int $timestamp Timestamp.
+     */
+    public function __construct(
+        /** @var int Timestamp. */
+        private readonly int $timestamp,
+    ) {
     }
 
+    /**
+     * Now.
+     *
+     * @return \DateTimeImmutable
+     */
     public function now(): \DateTimeImmutable {
         return (new \DateTimeImmutable('@' . $this->timestamp))->setTimezone(new \DateTimeZone('UTC'));
     }

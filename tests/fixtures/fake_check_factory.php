@@ -16,6 +16,11 @@
 
 declare(strict_types=1);
 
+namespace local_submissionaudit\fixtures;
+
+use local_submissionaudit\domain\check\check_interface;
+use local_submissionaudit\domain\port\check_factory_interface;
+
 /**
  * Check factory with a fixed list.
  *
@@ -23,20 +28,24 @@ declare(strict_types=1);
  * @copyright  2026 Vitalii Kuzmyn <vitalis.qw@gmail.com>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-
-namespace local_submissionaudit\fixtures;
-
-use local_submissionaudit\domain\check\check_interface;
-use local_submissionaudit\domain\port\check_factory_interface;
-
 final class fake_check_factory implements check_factory_interface {
     /** @var check_interface[] */
     private array $checks;
 
+    /**
+     * Constructor.
+     *
+     * @param check_interface... $checks Checks.
+     */
     public function __construct(check_interface ...$checks) {
         $this->checks = $checks;
     }
 
+    /**
+     * Checks.
+     *
+     * @return array
+     */
     public function checks(): array {
         return $this->checks;
     }

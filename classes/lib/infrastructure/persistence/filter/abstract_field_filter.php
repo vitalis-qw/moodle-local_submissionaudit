@@ -19,21 +19,20 @@ declare(strict_types=1);
 namespace local_submissionaudit\lib\infrastructure\persistence\filter;
 
 /**
- * Base for filters on one column.
+ * Validates the column name so a filter can never carry injected SQL.
  *
  * @package    local_submissionaudit
  * @copyright  2026 Vitalii Kuzmyn <vitalis.qw@gmail.com>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-
-/**
- * Validates the column name so a filter can never carry injected SQL.
- */
 abstract class abstract_field_filter implements filter_interface {
     /**
+     * Constructor.
+     *
      * @param string $field Column, optionally alias-qualified ("a.userid").
      */
     public function __construct(
+        /** @var string Column, optionally alias-qualified ("a.userid"). */
         protected readonly string $field,
     ) {
         if (!preg_match('/^[a-z_][a-z0-9_]*(\.[a-z_][a-z0-9_]*)?$/i', $field)) {
@@ -42,6 +41,8 @@ abstract class abstract_field_filter implements filter_interface {
     }
 
     /**
+     * Hint.
+     *
      * @return string
      */
     protected function hint(): string {

@@ -18,14 +18,6 @@ declare(strict_types=1);
 
 namespace local_submissionaudit\lib\ui\request;
 
-/**
- * Base request: declare rules, get a readonly object.
- *
- * @package    local_submissionaudit
- * @copyright  2026 Vitalii Kuzmyn <vitalis.qw@gmail.com>
- * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
- */
-
 use core\param;
 
 /**
@@ -38,8 +30,12 @@ use core\param;
  *
  * A key present in the input is cleaned with its param type. A missing key takes the
  * constructor default; without a default it is a missing-parameter error.
+ *
+ * @package    local_submissionaudit
+ * @copyright  2026 Vitalii Kuzmyn <vitalis.qw@gmail.com>
+ * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-abstract readonly class abstract_request implements request_interface {
+abstract class abstract_request implements request_interface {
     /**
      * Parameter name => core\param type.
      *
@@ -47,6 +43,12 @@ abstract readonly class abstract_request implements request_interface {
      */
     abstract protected static function rules(): array;
 
+    /**
+     * From array.
+     *
+     * @param array $input Input.
+     * @return static
+     */
     public static function from_array(array $input): static {
         $rules = static::rules();
         $constructor = (new \ReflectionClass(static::class))->getConstructor();
@@ -65,11 +67,21 @@ abstract readonly class abstract_request implements request_interface {
         return new static(...$args);
     }
 
+    /**
+     * From globals.
+     *
+     * @return static
+     */
     public static function from_globals(): static {
         // Same precedence as optional_param(): POST wins over GET.
         return static::from_array(array_merge($_GET, $_POST));
     }
 
+    /**
+     * To array.
+     *
+     * @return array
+     */
     public function to_array(): array {
         $out = [];
         foreach (get_object_vars($this) as $name => $value) {

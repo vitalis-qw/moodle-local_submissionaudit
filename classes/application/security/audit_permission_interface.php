@@ -18,6 +18,8 @@ declare(strict_types=1);
 
 namespace local_submissionaudit\application\security;
 
+use local_submissionaudit\lib\application\security\permission_interface;
+
 /**
  * Decides what a user may do with audits.
  *
@@ -25,8 +27,5 @@ namespace local_submissionaudit\application\security;
  * @copyright  2026 Vitalii Kuzmyn <vitalis.qw@gmail.com>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-
-use local_submissionaudit\lib\application\security\permission_interface;
-
 interface audit_permission_interface extends permission_interface {
 }

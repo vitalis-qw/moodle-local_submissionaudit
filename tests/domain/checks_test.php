@@ -16,15 +16,9 @@
 
 declare(strict_types=1);
 
-/**
- * Tests for the built-in checks.
- *
- * @package    local_submissionaudit
- * @copyright  2026 Vitalii Kuzmyn <vitalis.qw@gmail.com>
- * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
- */
-
 namespace local_submissionaudit\domain;
+
+defined('MOODLE_INTERNAL') || die();
 
 require_once(__DIR__ . '/../fixtures/fixtures.php');
 
@@ -38,16 +32,32 @@ use local_submissionaudit\fixtures\fake_verdict_client;
 use local_submissionaudit\lib\domain\exception\invariant_violation_exception;
 
 /**
+ * Tests for the built-in checks.
+ *
  * @covers \local_submissionaudit\domain\check\minimum_words
  * @covers \local_submissionaudit\domain\check\allowed_file_types
  * @covers \local_submissionaudit\domain\check\external_verdict
  * @covers \local_submissionaudit\domain\model\result
+ *
+ * @package    local_submissionaudit
+ * @copyright  2026 Vitalii Kuzmyn <vitalis.qw@gmail.com>
+ * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 final class checks_test extends \basic_testcase {
+    /**
+     * Submission.
+     *
+     * @param string $text Text.
+     * @param array $files Files.
+     * @return submission
+     */
     private function submission(string $text, array $files = []): submission {
         return new submission(1, 2, 3, $text, $files);
     }
 
+    /**
+     * Test: minimum words.
+     */
     public function test_minimum_words(): void {
         $check = new minimum_words(3);
         $fail = $check->run($this->submission('one two'));
@@ -64,6 +74,9 @@ final class checks_test extends \basic_testcase {
         new minimum_words(0);
     }
 
+    /**
+     * Test: allowed file types.
+     */
     public function test_allowed_file_types(): void {
         $check = new allowed_file_types([' .PDF ', 'docx', '']);
         $this->assertSame('msg:filetypes_nofiles', $check->run($this->submission(''))->messagekey);
@@ -78,6 +91,9 @@ final class checks_test extends \basic_testcase {
         new allowed_file_types(['', ' ']);
     }
 
+    /**
+     * Test: external verdict.
+     */
     public function test_external_verdict(): void {
         $client = new fake_verdict_client(new verdict(false, 0.87, 'Likely copied'));
         $result = (new external_verdict($client))->run($this->submission('x'));

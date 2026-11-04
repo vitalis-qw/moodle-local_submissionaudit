@@ -18,6 +18,9 @@ declare(strict_types=1);
 
 namespace local_submissionaudit\infrastructure\security;
 
+use local_submissionaudit\application\security\audit_permission_factory_interface;
+use local_submissionaudit\application\security\audit_permission_interface;
+
 /**
  * Builds audit permissions for a course module.
  *
@@ -25,11 +28,14 @@ namespace local_submissionaudit\infrastructure\security;
  * @copyright  2026 Vitalii Kuzmyn <vitalis.qw@gmail.com>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-
-use local_submissionaudit\application\security\audit_permission_factory_interface;
-use local_submissionaudit\application\security\audit_permission_interface;
-
 final class audit_permission_factory implements audit_permission_factory_interface {
+    /**
+     * For module.
+     *
+     * @param int $cmid Cmid.
+     * @param int $userid Userid.
+     * @return audit_permission_interface
+     */
     public function for_module(int $cmid, int $userid): audit_permission_interface {
         return new capability_audit_permission($userid, \core\context\module::instance($cmid));
     }

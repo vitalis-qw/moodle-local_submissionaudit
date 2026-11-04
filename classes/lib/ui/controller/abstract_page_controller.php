@@ -18,14 +18,6 @@ declare(strict_types=1);
 
 namespace local_submissionaudit\lib\ui\controller;
 
-/**
- * Base for controllers that render a page.
- *
- * @package    local_submissionaudit
- * @copyright  2026 Vitalii Kuzmyn <vitalis.qw@gmail.com>
- * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
- */
-
 use local_submissionaudit\lib\application\security\access_denied_exception;
 use local_submissionaudit\lib\domain\exception\not_found_exception;
 
@@ -35,6 +27,10 @@ use local_submissionaudit\lib\domain\exception\not_found_exception;
  *
  *     $request = report_request::from_globals();
  *     \core\di::get(report_controller::class)->handle($request)->send();
+ *
+ * @package    local_submissionaudit
+ * @copyright  2026 Vitalii Kuzmyn <vitalis.qw@gmail.com>
+ * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 abstract class abstract_page_controller implements controller_interface {
     /**
@@ -65,6 +61,8 @@ abstract class abstract_page_controller implements controller_interface {
     }
 
     /**
+     * Renderer.
+     *
      * @param string $component
      * @return \renderer_base
      */

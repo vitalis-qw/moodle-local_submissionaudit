@@ -25,9 +25,10 @@ namespace local_submissionaudit\application\port;
  * @copyright  2026 Vitalii Kuzmyn <vitalis.qw@gmail.com>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-
 interface user_directory_interface {
     /**
+     * Names.
+     *
      * @param int[] $userids
      * @return array<int, string> userid => display name; unknown ids are omitted.
      */

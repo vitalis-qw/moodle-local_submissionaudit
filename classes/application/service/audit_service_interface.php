@@ -18,6 +18,9 @@ declare(strict_types=1);
 
 namespace local_submissionaudit\application\service;
 
+use local_submissionaudit\application\dto\audit_report;
+use local_submissionaudit\application\dto\audit_request;
+
 /**
  * Use case: audit one submission.
  *
@@ -25,10 +28,6 @@ namespace local_submissionaudit\application\service;
  * @copyright  2026 Vitalii Kuzmyn <vitalis.qw@gmail.com>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-
-use local_submissionaudit\application\dto\audit_report;
-use local_submissionaudit\application\dto\audit_request;
-
 interface audit_service_interface {
     /**
      * Load the submission, run the checks, store and publish.

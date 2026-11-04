@@ -16,15 +16,9 @@
 
 declare(strict_types=1);
 
-/**
- * Tests for the audit aggregate and the auditor.
- *
- * @package    local_submissionaudit
- * @copyright  2026 Vitalii Kuzmyn <vitalis.qw@gmail.com>
- * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
- */
-
 namespace local_submissionaudit\domain;
+
+defined('MOODLE_INTERNAL') || die();
 
 require_once(__DIR__ . '/../fixtures/fixtures.php');
 
@@ -39,11 +33,20 @@ use local_submissionaudit\domain\service\auditor;
 use local_submissionaudit\fixtures\fake_check_factory;
 
 /**
+ * Tests for the audit aggregate and the auditor.
+ *
  * @covers \local_submissionaudit\domain\model\audit
  * @covers \local_submissionaudit\domain\event\audit_completed
  * @covers \local_submissionaudit\domain\service\auditor
+ *
+ * @package    local_submissionaudit
+ * @copyright  2026 Vitalii Kuzmyn <vitalis.qw@gmail.com>
+ * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 final class audit_test extends \basic_testcase {
+    /**
+     * Test: completed audit records event and counts failures.
+     */
     public function test_completed_audit_records_event_and_counts_failures(): void {
         $submission = new submission(10, 20, 30, 'one two', []);
         $results = [result::fail('a', 'k'), result::pass('b', 'k'), result::error('c', 'k')];
@@ -63,6 +66,9 @@ final class audit_test extends \basic_testcase {
         $this->assertSame(['submissionid' => 10, 'assignid' => 20, 'userid' => 30, 'failures' => 1], $events[0]->payload());
     }
 
+    /**
+     * Test: restored audit records nothing.
+     */
     public function test_restored_audit_records_nothing(): void {
         $audit = audit::restore(1, 2, 3, [result::pass('a', 'k')], 5);
         $this->assertFalse($audit->has_events());
@@ -71,12 +77,26 @@ final class audit_test extends \basic_testcase {
         audit::restore(1, 2, 3, ['not a result'], 5);
     }
 
+    /**
+     * Test: auditor isolates a throwing check.
+     */
     public function test_auditor_isolates_a_throwing_check(): void {
         $broken = new class implements check_interface {
+            /**
+             * Name.
+             *
+             * @return string
+             */
             public function name(): string {
                 return 'broken';
             }
 
+            /**
+             * Run.
+             *
+             * @param submission $submission Submission.
+             * @return result
+             */
             public function run(submission $submission): result {
                 throw new \RuntimeException('boom');
             }

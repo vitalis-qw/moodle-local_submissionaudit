@@ -18,6 +18,9 @@ declare(strict_types=1);
 
 namespace local_submissionaudit\ui\request;
 
+use core\param;
+use local_submissionaudit\lib\ui\request\abstract_request;
+
 /**
  * Parameters of the report page.
  *
@@ -25,17 +28,23 @@ namespace local_submissionaudit\ui\request;
  * @copyright  2026 Vitalii Kuzmyn <vitalis.qw@gmail.com>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-
-use core\param;
-use local_submissionaudit\lib\ui\request\abstract_request;
-
-final readonly class report_request extends abstract_request {
+final class report_request extends abstract_request {
     /**
+     * Constructor.
+     *
      * @param int $id Course module id of the assignment.
      */
-    public function __construct(public int $id) {
+    public function __construct(
+        /** @var int Course module id of the assignment. */
+        public int $id,
+    ) {
     }
 
+    /**
+     * Rules.
+     *
+     * @return array
+     */
     protected static function rules(): array {
         return ['id' => param::INT];
     }

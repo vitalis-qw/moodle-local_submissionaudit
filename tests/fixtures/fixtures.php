@@ -14,8 +14,6 @@
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
-declare(strict_types=1);
-
 /**
  * Loads the test doubles (tests/ is not autoloaded).
  *
@@ -24,7 +22,11 @@ declare(strict_types=1);
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
+declare(strict_types=1);
+
 namespace local_submissionaudit\fixtures;
+
+defined('MOODLE_INTERNAL') || die();
 
 require_once(__DIR__ . '/fixed_clock.php');
 require_once(__DIR__ . '/fake_submission_repository.php');

@@ -18,14 +18,6 @@ declare(strict_types=1);
 
 namespace local_submissionaudit\infrastructure\persistence;
 
-/**
- * Adapter: audits in local_submissionaudit_result, one row per check.
- *
- * @package    local_submissionaudit
- * @copyright  2026 Vitalii Kuzmyn <vitalis.qw@gmail.com>
- * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
- */
-
 use local_submissionaudit\application\factory\audit_factory_interface;
 use local_submissionaudit\domain\model\audit;
 use local_submissionaudit\domain\port\audit_repository_interface;
@@ -34,35 +26,72 @@ use local_submissionaudit\lib\domain\model\entity_interface;
 use local_submissionaudit\lib\infrastructure\persistence\filter\equal_filter;
 use local_submissionaudit\lib\infrastructure\persistence\parameter_bag;
 
+/**
+ * Adapter: audits in local_submissionaudit_result, one row per check.
+ *
+ * @package    local_submissionaudit
+ * @copyright  2026 Vitalii Kuzmyn <vitalis.qw@gmail.com>
+ * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ */
 final class db_audit_repository implements audit_repository_interface {
     /** @var string */
+    /** @var string Table. */
     public const TABLE = 'local_submissionaudit_result';
 
     /**
+     * Constructor.
+     *
      * @param \moodle_database $db
      * @param result_record_mapper $mapper
      * @param audit_factory_interface $factory
      */
     public function __construct(
+        /** @var \moodle_database Db. */
         private readonly \moodle_database $db,
+        /** @var result_record_mapper Mapper. */
         private readonly result_record_mapper $mapper,
+        /** @var audit_factory_interface Factory. */
         private readonly audit_factory_interface $factory,
     ) {
     }
 
+    /**
+     * Find.
+     *
+     * @param int $id Id.
+     * @return ?entity_interface
+     */
     public function find(int $id): ?entity_interface {
         $audits = $this->audits_from($this->rows(new equal_filter('submissionid', $id)));
         return $audits[0] ?? null;
     }
 
+    /**
+     * Get.
+     *
+     * @param int $id Id.
+     * @return entity_interface
+     */
     public function get(int $id): entity_interface {
         return $this->find($id) ?? throw not_found_exception::for('audit', $id);
     }
 
+    /**
+     * Find by assignment.
+     *
+     * @param int $assignid Assignid.
+     * @return array
+     */
     public function find_by_assignment(int $assignid): array {
         return $this->audits_from($this->rows(new equal_filter('assignid', $assignid)));
     }
 
+    /**
+     * Save.
+     *
+     * @param entity_interface $entity Entity.
+     * @return entity_interface
+     */
     public function save(entity_interface $entity): entity_interface {
         if (!$entity instanceof audit) {
             throw new \InvalidArgumentException('db_audit_repository stores audits only');
@@ -84,18 +113,26 @@ final class db_audit_repository implements audit_repository_interface {
         return $entity;
     }
 
+    /**
+     * Delete.
+     *
+     * @param entity_interface $entity Entity.
+     */
     public function delete(entity_interface $entity): void {
         $this->db->delete_records(self::TABLE, ['submissionid' => $entity->get_id()]);
     }
 
     /**
+     * Rows.
+     *
      * @param equal_filter $filter
      * @return \stdClass[]
      */
     private function rows(equal_filter $filter): array {
         $params = new parameter_bag();
         $where = $filter->sql($params, $this->db);
-        return array_values($this->db->get_records_select(self::TABLE, $where, $params->all(), 'timecreated DESC, submissionid, id'));
+        $records = $this->db->get_records_select(self::TABLE, $where, $params->all(), 'timecreated DESC, submissionid, id');
+        return array_values($records);
     }
 
     /**

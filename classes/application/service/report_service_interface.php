@@ -18,6 +18,8 @@ declare(strict_types=1);
 
 namespace local_submissionaudit\application\service;
 
+use local_submissionaudit\application\dto\audit_report;
+
 /**
  * Use case: the audit report of an assignment.
  *
@@ -25,17 +27,18 @@ namespace local_submissionaudit\application\service;
  * @copyright  2026 Vitalii Kuzmyn <vitalis.qw@gmail.com>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-
-use local_submissionaudit\application\dto\audit_report;
-
 interface report_service_interface {
     /**
+     * For assignment.
+     *
      * @param int $assignid
      * @return audit_report[] Newest first.
      */
     public function for_assignment(int $assignid): array;
 
     /**
+     * Student names.
+     *
      * @param int[] $userids
      * @return array<int, string>
      */

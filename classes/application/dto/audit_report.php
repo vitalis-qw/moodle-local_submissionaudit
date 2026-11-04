@@ -18,6 +18,8 @@ declare(strict_types=1);
 
 namespace local_submissionaudit\application\dto;
 
+use local_submissionaudit\lib\application\dto\abstract_dto;
+
 /**
  * An audit, as data for the ui and tasks.
  *
@@ -25,11 +27,10 @@ namespace local_submissionaudit\application\dto;
  * @copyright  2026 Vitalii Kuzmyn <vitalis.qw@gmail.com>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-
-use local_submissionaudit\lib\application\dto\abstract_dto;
-
-final readonly class audit_report extends abstract_dto {
+final class audit_report extends abstract_dto {
     /**
+     * Constructor.
+     *
      * @param int $submissionid
      * @param int $assignid
      * @param int $userid
@@ -38,12 +39,18 @@ final readonly class audit_report extends abstract_dto {
      * @param int $failures
      */
     public function __construct(
-        public int $submissionid,
-        public int $assignid,
-        public int $userid,
-        public int $timecreated,
-        public array $results,
-        public int $failures,
+        /** @var int Submissionid. */
+        public readonly int $submissionid,
+        /** @var int Assignid. */
+        public readonly int $assignid,
+        /** @var int Userid. */
+        public readonly int $userid,
+        /** @var int Timecreated. */
+        public readonly int $timecreated,
+        /** @var check_result[] Results. */
+        public readonly array $results,
+        /** @var int Failures. */
+        public readonly int $failures,
     ) {
     }
 }

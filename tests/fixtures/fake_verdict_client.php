@@ -16,6 +16,12 @@
 
 declare(strict_types=1);
 
+namespace local_submissionaudit\fixtures;
+
+use local_submissionaudit\domain\model\submission;
+use local_submissionaudit\domain\model\verdict;
+use local_submissionaudit\domain\port\verdict_client_interface;
+
 /**
  * Verdict client with a scripted answer.
  *
@@ -23,20 +29,30 @@ declare(strict_types=1);
  * @copyright  2026 Vitalii Kuzmyn <vitalis.qw@gmail.com>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-
-namespace local_submissionaudit\fixtures;
-
-use local_submissionaudit\domain\model\submission;
-use local_submissionaudit\domain\model\verdict;
-use local_submissionaudit\domain\port\verdict_client_interface;
-
 final class fake_verdict_client implements verdict_client_interface {
     /** @var submission[] */
     public array $asked = [];
 
-    public function __construct(private readonly ?verdict $verdict, private readonly ?string $error = null) {
+    /**
+     * Constructor.
+     *
+     * @param ?verdict $verdict Verdict.
+     * @param ?string $error Error.
+     */
+    public function __construct(
+        /** @var ?verdict Verdict. */
+        private readonly ?verdict $verdict,
+        /** @var ?string Error. */
+        private readonly ?string $error = null,
+    ) {
     }
 
+    /**
+     * Verdict.
+     *
+     * @param submission $submission Submission.
+     * @return verdict
+     */
     public function verdict(submission $submission): verdict {
         $this->asked[] = $submission;
         if ($this->error !== null) {

@@ -18,6 +18,9 @@ declare(strict_types=1);
 
 namespace local_submissionaudit\lib\testing;
 
+use local_submissionaudit\lib\domain\event\domain_event_interface;
+use local_submissionaudit\lib\domain\event\event_publisher_interface;
+
 /**
  * Collects published events for assertions.
  *
@@ -25,14 +28,15 @@ namespace local_submissionaudit\lib\testing;
  * @copyright  2026 Vitalii Kuzmyn <vitalis.qw@gmail.com>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-
-use local_submissionaudit\lib\domain\event\domain_event_interface;
-use local_submissionaudit\lib\domain\event\event_publisher_interface;
-
 final class in_memory_event_publisher implements event_publisher_interface {
     /** @var domain_event_interface[] */
     private array $published = [];
 
+    /**
+     * Publish.
+     *
+     * @param domain_event_interface... $events Events.
+     */
     public function publish(domain_event_interface ...$events): void {
         foreach ($events as $event) {
             $this->published[] = $event;
@@ -40,6 +44,8 @@ final class in_memory_event_publisher implements event_publisher_interface {
     }
 
     /**
+     * Published.
+     *
      * @return domain_event_interface[]
      */
     public function published(): array {
@@ -47,6 +53,8 @@ final class in_memory_event_publisher implements event_publisher_interface {
     }
 
     /**
+     * Of type.
+     *
      * @param class-string<domain_event_interface> $class
      * @return domain_event_interface[]
      */

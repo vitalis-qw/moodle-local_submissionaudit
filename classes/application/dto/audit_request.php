@@ -18,6 +18,8 @@ declare(strict_types=1);
 
 namespace local_submissionaudit\application\dto;
 
+use local_submissionaudit\lib\application\dto\abstract_dto;
+
 /**
  * Input of the audit use case.
  *
@@ -25,13 +27,15 @@ namespace local_submissionaudit\application\dto;
  * @copyright  2026 Vitalii Kuzmyn <vitalis.qw@gmail.com>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-
-use local_submissionaudit\lib\application\dto\abstract_dto;
-
-final readonly class audit_request extends abstract_dto {
+final class audit_request extends abstract_dto {
     /**
+     * Constructor.
+     *
      * @param int $submissionid
      */
-    public function __construct(public int $submissionid) {
+    public function __construct(
+        /** @var int Submissionid. */
+        public int $submissionid,
+    ) {
     }
 }

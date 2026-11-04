@@ -18,6 +18,8 @@ declare(strict_types=1);
 
 namespace local_submissionaudit\lib\infrastructure\persistence\filter;
 
+use local_submissionaudit\lib\infrastructure\persistence\parameter_bag;
+
 /**
  * column = :value.
  *
@@ -25,19 +27,31 @@ namespace local_submissionaudit\lib\infrastructure\persistence\filter;
  * @copyright  2026 Vitalii Kuzmyn <vitalis.qw@gmail.com>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-
-use local_submissionaudit\lib\infrastructure\persistence\parameter_bag;
-
 final class equal_filter extends abstract_field_filter {
     /**
+     * Constructor.
+     *
      * @param string $field
      * @param int|string|float|bool $value
      * @param bool $negate "<>" instead of "=".
      */
-    public function __construct(string $field, private readonly int|string|float|bool $value, private readonly bool $negate = false) {
+    public function __construct(
+        string $field,
+        /** @var int|string|float|bool Value. */
+        private readonly int|string|float|bool $value,
+        /** @var bool "<>" instead of "=". */
+        private readonly bool $negate = false,
+    ) {
         parent::__construct($field);
     }
 
+    /**
+     * Sql.
+     *
+     * @param parameter_bag $params Params.
+     * @param \moodle_database $db Db.
+     * @return string
+     */
     public function sql(parameter_bag $params, \moodle_database $db): string {
         $name = $params->add($this->value, $this->hint());
         return $this->field . ($this->negate ? ' <> :' : ' = :') . $name;

@@ -19,20 +19,18 @@ declare(strict_types=1);
 namespace local_submissionaudit\lib\domain\model;
 
 /**
- * An object with identity.
+ * An object whose identity, not its attributes, makes it what it is.
+ *
+ * The id is null until the entity has been persisted.
  *
  * @package    local_submissionaudit
  * @copyright  2026 Vitalii Kuzmyn <vitalis.qw@gmail.com>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-
-/**
- * An object whose identity, not its attributes, makes it what it is.
- *
- * The id is null until the entity has been persisted.
- */
 interface entity_interface {
     /**
+     * Get id.
+     *
      * @return int|null
      */
     public function get_id(): ?int;

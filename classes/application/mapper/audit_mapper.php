@@ -18,14 +18,6 @@ declare(strict_types=1);
 
 namespace local_submissionaudit\application\mapper;
 
-/**
- * audit → audit_report.
- *
- * @package    local_submissionaudit
- * @copyright  2026 Vitalii Kuzmyn <vitalis.qw@gmail.com>
- * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
- */
-
 use local_submissionaudit\application\dto\audit_report;
 use local_submissionaudit\application\dto\check_result;
 use local_submissionaudit\domain\model\audit;
@@ -34,7 +26,20 @@ use local_submissionaudit\lib\application\dto\dto_interface;
 use local_submissionaudit\lib\application\mapper\abstract_mapper;
 use local_submissionaudit\lib\domain\model\entity_interface;
 
+/**
+ * audit → audit_report.
+ *
+ * @package    local_submissionaudit
+ * @copyright  2026 Vitalii Kuzmyn <vitalis.qw@gmail.com>
+ * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ */
 final class audit_mapper extends abstract_mapper implements audit_mapper_interface {
+    /**
+     * To dto.
+     *
+     * @param entity_interface $entity Entity.
+     * @return dto_interface
+     */
     public function to_dto(entity_interface $entity): dto_interface {
         if (!$entity instanceof audit) {
             throw new \InvalidArgumentException('audit_mapper maps audits only');

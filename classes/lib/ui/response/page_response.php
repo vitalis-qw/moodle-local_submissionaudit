@@ -19,24 +19,30 @@ declare(strict_types=1);
 namespace local_submissionaudit\lib\ui\response;
 
 /**
- * Full themed page.
+ * Body between the theme header and footer. The controller has already set up $PAGE.
  *
  * @package    local_submissionaudit
  * @copyright  2026 Vitalii Kuzmyn <vitalis.qw@gmail.com>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-
-/**
- * Body between the theme header and footer. The controller has already set up $PAGE.
- */
 final class page_response implements response_interface {
     /**
+     * Constructor.
+     *
      * @param string $body HTML.
      * @param \renderer_base|null $output Defaults to the core renderer.
      */
-    public function __construct(private readonly string $body, private readonly ?\renderer_base $output = null) {
+    public function __construct(
+        /** @var string HTML. */
+        private readonly string $body,
+        /** @var \renderer_base|null Defaults to the core renderer. */
+        private readonly ?\renderer_base $output = null,
+    ) {
     }
 
+    /**
+     * Send.
+     */
     public function send(): void {
         global $OUTPUT;
         $output = $this->output ?? $OUTPUT;

@@ -18,6 +18,8 @@ declare(strict_types=1);
 
 namespace local_submissionaudit\application\dto;
 
+use local_submissionaudit\lib\application\dto\abstract_dto;
+
 /**
  * One check outcome, as data.
  *
@@ -25,11 +27,10 @@ namespace local_submissionaudit\application\dto;
  * @copyright  2026 Vitalii Kuzmyn <vitalis.qw@gmail.com>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-
-use local_submissionaudit\lib\application\dto\abstract_dto;
-
-final readonly class check_result extends abstract_dto {
+final class check_result extends abstract_dto {
     /**
+     * Constructor.
+     *
      * @param string $checkname
      * @param string $status pass|fail|error
      * @param float|null $score
@@ -37,11 +38,16 @@ final readonly class check_result extends abstract_dto {
      * @param array<string, scalar> $messageparams
      */
     public function __construct(
-        public string $checkname,
-        public string $status,
-        public ?float $score,
-        public string $messagekey,
-        public array $messageparams = [],
+        /** @var string Checkname. */
+        public readonly string $checkname,
+        /** @var string pass|fail|error */
+        public readonly string $status,
+        /** @var float|null Score. */
+        public readonly ?float $score,
+        /** @var string Messagekey. */
+        public readonly string $messagekey,
+        /** @var array Messageparams. */
+        public readonly array $messageparams = [],
     ) {
     }
 }

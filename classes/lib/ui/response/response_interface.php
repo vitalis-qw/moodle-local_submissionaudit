@@ -19,16 +19,15 @@ declare(strict_types=1);
 namespace local_submissionaudit\lib\ui\response;
 
 /**
- * What a controller returns.
+ * The entry script calls send(); nothing is echoed before that.
  *
  * @package    local_submissionaudit
  * @copyright  2026 Vitalii Kuzmyn <vitalis.qw@gmail.com>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-
-/**
- * The entry script calls send(); nothing is echoed before that.
- */
 interface response_interface {
+    /**
+     * Send.
+     */
     public function send(): void;
 }

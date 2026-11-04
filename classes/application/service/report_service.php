@@ -18,6 +18,10 @@ declare(strict_types=1);
 
 namespace local_submissionaudit\application\service;
 
+use local_submissionaudit\application\mapper\audit_mapper_interface;
+use local_submissionaudit\application\port\user_directory_interface;
+use local_submissionaudit\domain\port\audit_repository_interface;
+
 /**
  * Use case: the audit report of an assignment.
  *
@@ -25,28 +29,40 @@ namespace local_submissionaudit\application\service;
  * @copyright  2026 Vitalii Kuzmyn <vitalis.qw@gmail.com>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-
-use local_submissionaudit\application\mapper\audit_mapper_interface;
-use local_submissionaudit\application\port\user_directory_interface;
-use local_submissionaudit\domain\port\audit_repository_interface;
-
 final class report_service implements report_service_interface {
     /**
+     * Constructor.
+     *
      * @param audit_repository_interface $audits
      * @param audit_mapper_interface $mapper
      * @param user_directory_interface $users
      */
     public function __construct(
+        /** @var audit_repository_interface Audits. */
         private readonly audit_repository_interface $audits,
+        /** @var audit_mapper_interface Mapper. */
         private readonly audit_mapper_interface $mapper,
+        /** @var user_directory_interface Users. */
         private readonly user_directory_interface $users,
     ) {
     }
 
+    /**
+     * For assignment.
+     *
+     * @param int $assignid Assignid.
+     * @return array
+     */
     public function for_assignment(int $assignid): array {
         return $this->mapper->to_dto_collection($this->audits->find_by_assignment($assignid));
     }
 
+    /**
+     * Student names.
+     *
+     * @param array $userids Userids.
+     * @return array
+     */
     public function student_names(array $userids): array {
         return $this->users->names($userids);
     }

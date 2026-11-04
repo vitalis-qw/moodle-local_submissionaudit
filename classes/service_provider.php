@@ -16,14 +16,6 @@
 
 declare(strict_types=1);
 
-/**
- * Container bindings: every interface to its implementation.
- *
- * @package    local_submissionaudit
- * @copyright  2026 Vitalii Kuzmyn <vitalis.qw@gmail.com>
- * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
- */
-
 namespace local_submissionaudit;
 
 use local_submissionaudit\application\factory\audit_factory;
@@ -62,8 +54,15 @@ use local_submissionaudit\ui\controller\report_controller_interface;
 
 /**
  * Registered through db/hooks.php. Everything not listed here is autowired by class name.
+ *
+ * @package    local_submissionaudit
+ * @copyright  2026 Vitalii Kuzmyn <vitalis.qw@gmail.com>
+ * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 final class service_provider extends base_service_provider {
+    /**
+     * Register.
+     */
     protected function register(): void {
         $this
             // Domain ports.

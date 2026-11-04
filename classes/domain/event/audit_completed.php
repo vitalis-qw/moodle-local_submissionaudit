@@ -18,6 +18,8 @@ declare(strict_types=1);
 
 namespace local_submissionaudit\domain\event;
 
+use local_submissionaudit\lib\domain\event\domain_event;
+
 /**
  * Domain event: a submission has been audited.
  *
@@ -25,11 +27,10 @@ namespace local_submissionaudit\domain\event;
  * @copyright  2026 Vitalii Kuzmyn <vitalis.qw@gmail.com>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-
-use local_submissionaudit\lib\domain\event\domain_event;
-
-final readonly class audit_completed extends domain_event {
+final class audit_completed extends domain_event {
     /**
+     * Constructor.
+     *
      * @param int $occurredat
      * @param int $submissionid
      * @param int $assignid
@@ -38,18 +39,32 @@ final readonly class audit_completed extends domain_event {
      */
     public function __construct(
         int $occurredat,
-        public int $submissionid,
-        public int $assignid,
-        public int $userid,
-        public int $failures,
+        /** @var int Submissionid. */
+        public readonly int $submissionid,
+        /** @var int Assignid. */
+        public readonly int $assignid,
+        /** @var int Userid. */
+        public readonly int $userid,
+        /** @var int Number of failing checks. */
+        public readonly int $failures,
     ) {
         parent::__construct($occurredat);
     }
 
+    /**
+     * Name.
+     *
+     * @return string
+     */
     public function name(): string {
         return 'audit_completed';
     }
 
+    /**
+     * Payload.
+     *
+     * @return array
+     */
     public function payload(): array {
         return [
             'submissionid' => $this->submissionid,

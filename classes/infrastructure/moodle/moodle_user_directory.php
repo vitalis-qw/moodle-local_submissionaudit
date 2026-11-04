@@ -18,6 +18,8 @@ declare(strict_types=1);
 
 namespace local_submissionaudit\infrastructure\moodle;
 
+use local_submissionaudit\application\port\user_directory_interface;
+
 /**
  * Adapter: user table → display names.
  *
@@ -25,16 +27,24 @@ namespace local_submissionaudit\infrastructure\moodle;
  * @copyright  2026 Vitalii Kuzmyn <vitalis.qw@gmail.com>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-
-use local_submissionaudit\application\port\user_directory_interface;
-
 final class moodle_user_directory implements user_directory_interface {
     /**
+     * Constructor.
+     *
      * @param \moodle_database $db
      */
-    public function __construct(private readonly \moodle_database $db) {
+    public function __construct(
+        /** @var \moodle_database Db. */
+        private readonly \moodle_database $db,
+    ) {
     }
 
+    /**
+     * Names.
+     *
+     * @param array $userids Userids.
+     * @return array
+     */
     public function names(array $userids): array {
         $userids = array_values(array_unique(array_map('intval', $userids)));
         if ($userids === []) {

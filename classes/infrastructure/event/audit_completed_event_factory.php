@@ -18,22 +18,20 @@ declare(strict_types=1);
 
 namespace local_submissionaudit\infrastructure\event;
 
-/**
- * Domain audit_completed → Moodle event.
- *
- * @package    local_submissionaudit
- * @copyright  2026 Vitalii Kuzmyn <vitalis.qw@gmail.com>
- * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
- */
-
 use local_submissionaudit\domain\event\audit_completed;
 use local_submissionaudit\lib\domain\event\domain_event_interface;
 
 /**
  * Registered in the service provider as the publisher's mapping for audit_completed.
+ *
+ * @package    local_submissionaudit
+ * @copyright  2026 Vitalii Kuzmyn <vitalis.qw@gmail.com>
+ * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 final class audit_completed_event_factory {
     /**
+     * Invoke the object as a function.
+     *
      * @param domain_event_interface $event
      * @return \core\event\base
      */

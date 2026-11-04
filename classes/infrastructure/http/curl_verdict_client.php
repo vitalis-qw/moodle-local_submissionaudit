@@ -18,14 +18,6 @@ declare(strict_types=1);
 
 namespace local_submissionaudit\infrastructure\http;
 
-/**
- * Adapter: asks an HTTPS endpoint for a verdict through Moodle's curl wrapper.
- *
- * @package    local_submissionaudit
- * @copyright  2026 Vitalii Kuzmyn <vitalis.qw@gmail.com>
- * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
- */
-
 use local_submissionaudit\domain\model\submission;
 use local_submissionaudit\domain\model\verdict;
 use local_submissionaudit\domain\port\verdict_client_interface;
@@ -35,18 +27,36 @@ use local_submissionaudit\domain\port\verdict_client_interface;
  *
  * Request body: {"submissionid": 1, "text": "...", "filenames": ["a.pdf"]}.
  * Expected answer: {"status": "pass"|"fail", "score": 0.0|null, "message": "..."}.
+ *
+ * @package    local_submissionaudit
+ * @copyright  2026 Vitalii Kuzmyn <vitalis.qw@gmail.com>
+ * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 final class curl_verdict_client implements verdict_client_interface {
     /** @var int Seconds before giving up on the endpoint. */
+    /** @var int Timeout. */
     public const TIMEOUT = 20;
 
     /**
+     * Constructor.
+     *
      * @param string $url Endpoint URL; empty means the client is unconfigured.
      * @param string $token Bearer token, may be empty.
      */
-    public function __construct(private readonly string $url, private readonly string $token) {
+    public function __construct(
+        /** @var string Endpoint URL; empty means the client is unconfigured. */
+        private readonly string $url,
+        /** @var string Bearer token, may be empty. */
+        private readonly string $token,
+    ) {
     }
 
+    /**
+     * Verdict.
+     *
+     * @param submission $submission Submission.
+     * @return verdict
+     */
     public function verdict(submission $submission): verdict {
         if ($this->url === '') {
             throw new \RuntimeException('No external verdict endpoint configured');

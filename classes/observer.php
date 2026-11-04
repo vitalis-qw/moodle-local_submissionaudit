@@ -16,14 +16,6 @@
 
 declare(strict_types=1);
 
-/**
- * Event observer: queues an audit, never runs one inline.
- *
- * @package    local_submissionaudit
- * @copyright  2026 Vitalii Kuzmyn <vitalis.qw@gmail.com>
- * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
- */
-
 namespace local_submissionaudit;
 
 use local_submissionaudit\task\audit_submission;
@@ -31,9 +23,15 @@ use local_submissionaudit\task\audit_submission;
 /**
  * The submission request must stay fast, and a failing external service must not
  * surface as an error to the student.
+ *
+ * @package    local_submissionaudit
+ * @copyright  2026 Vitalii Kuzmyn <vitalis.qw@gmail.com>
+ * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 final class observer {
     /**
+     * Assessable submitted.
+     *
      * @param \mod_assign\event\assessable_submitted $event
      */
     public static function assessable_submitted(\mod_assign\event\assessable_submitted $event): void {

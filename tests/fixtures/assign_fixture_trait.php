@@ -16,21 +16,19 @@
 
 declare(strict_types=1);
 
+namespace local_submissionaudit\fixtures;
+
 /**
- * Creates a course, an assignment and a submission.
+ * For advanced_testcase subclasses.
  *
  * @package    local_submissionaudit
  * @copyright  2026 Vitalii Kuzmyn <vitalis.qw@gmail.com>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-
-namespace local_submissionaudit\fixtures;
-
-/**
- * For advanced_testcase subclasses.
- */
 trait assign_fixture_trait {
     /**
+     * Create submission.
+     *
      * @param string $text Online text.
      * @param string[] $filenames Files to put in the submission file area.
      * @return array{0: \stdClass, 1: \stdClass, 2: \stdClass, 3: \stdClass} [course, assign, submission record, student]

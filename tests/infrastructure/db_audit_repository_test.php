@@ -16,14 +16,6 @@
 
 declare(strict_types=1);
 
-/**
- * Tests for the DB audit repository.
- *
- * @package    local_submissionaudit
- * @copyright  2026 Vitalii Kuzmyn <vitalis.qw@gmail.com>
- * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
- */
-
 namespace local_submissionaudit\infrastructure;
 
 use local_submissionaudit\application\factory\audit_factory;
@@ -36,15 +28,29 @@ use local_submissionaudit\infrastructure\persistence\result_record_mapper;
 use local_submissionaudit\lib\domain\exception\not_found_exception;
 
 /**
+ * Tests for the DB audit repository.
+ *
  * @covers \local_submissionaudit\infrastructure\persistence\db_audit_repository
  * @covers \local_submissionaudit\infrastructure\persistence\result_record_mapper
+ *
+ * @package    local_submissionaudit
+ * @copyright  2026 Vitalii Kuzmyn <vitalis.qw@gmail.com>
+ * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 final class db_audit_repository_test extends \advanced_testcase {
+    /**
+     * Repository.
+     *
+     * @return db_audit_repository
+     */
     private function repository(): db_audit_repository {
         global $DB;
         return new db_audit_repository($DB, new result_record_mapper(), new audit_factory());
     }
 
+    /**
+     * Test: save replaces find and delete.
+     */
     public function test_save_replaces_find_and_delete(): void {
         global $DB;
         $this->resetAfterTest();
@@ -77,6 +83,9 @@ final class db_audit_repository_test extends \advanced_testcase {
         $repo->get(5);
     }
 
+    /**
+     * Test: find by assignment groups rows newest first.
+     */
     public function test_find_by_assignment_groups_rows_newest_first(): void {
         $this->resetAfterTest();
         $repo = $this->repository();

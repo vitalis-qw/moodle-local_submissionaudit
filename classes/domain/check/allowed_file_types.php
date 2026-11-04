@@ -18,6 +18,10 @@ declare(strict_types=1);
 
 namespace local_submissionaudit\domain\check;
 
+use local_submissionaudit\domain\model\result;
+use local_submissionaudit\domain\model\submission;
+use local_submissionaudit\lib\domain\exception\invariant_violation_exception;
+
 /**
  * Fails when a submitted file has an extension outside the allowed list.
  *
@@ -25,19 +29,17 @@ namespace local_submissionaudit\domain\check;
  * @copyright  2026 Vitalii Kuzmyn <vitalis.qw@gmail.com>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-
-use local_submissionaudit\domain\model\result;
-use local_submissionaudit\domain\model\submission;
-use local_submissionaudit\lib\domain\exception\invariant_violation_exception;
-
 final class allowed_file_types implements check_interface {
     /** @var string */
+    /** @var string Name. */
     public const NAME = 'allowed_file_types';
 
     /** @var string[] Lower-case extensions without the dot. */
     private array $allowed = [];
 
     /**
+     * Constructor.
+     *
      * @param string[] $extensions Allowed extensions, with or without a leading dot, any case.
      */
     public function __construct(array $extensions) {
@@ -52,10 +54,21 @@ final class allowed_file_types implements check_interface {
         }
     }
 
+    /**
+     * Name.
+     *
+     * @return string
+     */
     public function name(): string {
         return self::NAME;
     }
 
+    /**
+     * Run.
+     *
+     * @param submission $submission Submission.
+     * @return result
+     */
     public function run(submission $submission): result {
         $filenames = $submission->filenames();
         if ($filenames === []) {

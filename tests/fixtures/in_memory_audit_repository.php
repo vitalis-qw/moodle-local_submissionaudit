@@ -16,14 +16,6 @@
 
 declare(strict_types=1);
 
-/**
- * Audit repository held in memory.
- *
- * @package    local_submissionaudit
- * @copyright  2026 Vitalii Kuzmyn <vitalis.qw@gmail.com>
- * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
- */
-
 namespace local_submissionaudit\fixtures;
 
 use local_submissionaudit\domain\model\audit;
@@ -31,11 +23,31 @@ use local_submissionaudit\domain\port\audit_repository_interface;
 use local_submissionaudit\lib\domain\model\entity_interface;
 use local_submissionaudit\lib\testing\in_memory_repository;
 
+/**
+ * Audit repository held in memory.
+ *
+ * @package    local_submissionaudit
+ * @copyright  2026 Vitalii Kuzmyn <vitalis.qw@gmail.com>
+ * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ */
 final class in_memory_audit_repository extends in_memory_repository implements audit_repository_interface {
+    /**
+     * With id.
+     *
+     * @param entity_interface $entity Entity.
+     * @param int $id Id.
+     * @return entity_interface
+     */
     protected function with_id(entity_interface $entity, int $id): entity_interface {
         return $entity; // Audits always carry their submission id.
     }
 
+    /**
+     * Find by assignment.
+     *
+     * @param int $assignid Assignid.
+     * @return array
+     */
     public function find_by_assignment(int $assignid): array {
         $found = array_filter($this->items, static fn(audit $a): bool => $a->assignid() === $assignid);
         usort($found, static fn(audit $a, audit $b): int => $b->timecreated() <=> $a->timecreated());

@@ -18,14 +18,6 @@ declare(strict_types=1);
 
 namespace local_submissionaudit\lib\di;
 
-/**
- * Base class for a plugin service provider.
- *
- * @package    local_submissionaudit
- * @copyright  2026 Vitalii Kuzmyn <vitalis.qw@gmail.com>
- * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
- */
-
 use core\hook\di_configuration;
 
 /**
@@ -40,6 +32,10 @@ use core\hook\di_configuration;
  * Anything not bound here is autowired by class name, so only interfaces and services
  * with non-trivial construction need an entry. Fetch services with
  * \core\di::get(some_interface::class); never inject the container itself.
+ *
+ * @package    local_submissionaudit
+ * @copyright  2026 Vitalii Kuzmyn <vitalis.qw@gmail.com>
+ * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 abstract class service_provider {
     /** @var di_configuration The hook the definitions are added to. */

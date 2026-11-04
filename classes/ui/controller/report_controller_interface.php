@@ -18,6 +18,8 @@ declare(strict_types=1);
 
 namespace local_submissionaudit\ui\controller;
 
+use local_submissionaudit\lib\ui\controller\controller_interface;
+
 /**
  * Renders the audit report of an assignment.
  *
@@ -25,8 +27,5 @@ namespace local_submissionaudit\ui\controller;
  * @copyright  2026 Vitalii Kuzmyn <vitalis.qw@gmail.com>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-
-use local_submissionaudit\lib\ui\controller\controller_interface;
-
 interface report_controller_interface extends controller_interface {
 }

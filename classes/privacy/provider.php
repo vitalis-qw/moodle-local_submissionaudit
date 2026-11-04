@@ -18,14 +18,6 @@ declare(strict_types=1);
 
 namespace local_submissionaudit\privacy;
 
-/**
- * Privacy API: audit results are personal data of the student.
- *
- * @package    local_submissionaudit
- * @copyright  2026 Vitalii Kuzmyn <vitalis.qw@gmail.com>
- * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
- */
-
 use core_privacy\local\metadata\collection;
 use core_privacy\local\request\approved_contextlist;
 use core_privacy\local\request\approved_userlist;
@@ -34,13 +26,27 @@ use core_privacy\local\request\userlist;
 use core_privacy\local\request\writer;
 use local_submissionaudit\ui\message_formatter;
 
+/**
+ * Privacy API: audit results are personal data of the student.
+ *
+ * @package    local_submissionaudit
+ * @copyright  2026 Vitalii Kuzmyn <vitalis.qw@gmail.com>
+ * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ */
 final class provider implements
     \core_privacy\local\metadata\provider,
-    \core_privacy\local\request\plugin\provider,
-    \core_privacy\local\request\core_userlist_provider {
+    \core_privacy\local\request\core_userlist_provider,
+    \core_privacy\local\request\plugin\provider {
     /** @var string */
+    /** @var string Table. */
     private const TABLE = 'local_submissionaudit_result';
 
+    /**
+     * Get metadata.
+     *
+     * @param collection $collection Collection.
+     * @return collection
+     */
     public static function get_metadata(collection $collection): collection {
         $collection->add_database_table(self::TABLE, [
             'userid' => 'privacy:metadata:result:userid',
@@ -58,6 +64,12 @@ final class provider implements
         return $collection;
     }
 
+    /**
+     * Get contexts for userid.
+     *
+     * @param int $userid Userid.
+     * @return contextlist
+     */
     public static function get_contexts_for_userid(int $userid): contextlist {
         $sql = "SELECT ctx.id
                   FROM {" . self::TABLE . "} r
@@ -70,6 +82,11 @@ final class provider implements
         return $contextlist;
     }
 
+    /**
+     * Get users in context.
+     *
+     * @param userlist $userlist Userlist.
+     */
     public static function get_users_in_context(userlist $userlist) {
         $context = $userlist->get_context();
         if (!$context instanceof \context_module) {
@@ -83,6 +100,11 @@ final class provider implements
         $userlist->add_from_sql('userid', $sql, ['cmid' => $context->instanceid]);
     }
 
+    /**
+     * Export user data.
+     *
+     * @param approved_contextlist $contextlist Contextlist.
+     */
     public static function export_user_data(approved_contextlist $contextlist) {
         global $DB;
         $userid = $contextlist->get_user()->id;
@@ -113,6 +135,11 @@ final class provider implements
         }
     }
 
+    /**
+     * Delete data for all users in context.
+     *
+     * @param \context $context Context.
+     */
     public static function delete_data_for_all_users_in_context(\context $context) {
         global $DB;
         $cm = self::assign_cm($context);
@@ -121,6 +148,11 @@ final class provider implements
         }
     }
 
+    /**
+     * Delete data for user.
+     *
+     * @param approved_contextlist $contextlist Contextlist.
+     */
     public static function delete_data_for_user(approved_contextlist $contextlist) {
         global $DB;
         $userid = $contextlist->get_user()->id;
@@ -132,6 +164,11 @@ final class provider implements
         }
     }
 
+    /**
+     * Delete data for users.
+     *
+     * @param approved_userlist $userlist Userlist.
+     */
     public static function delete_data_for_users(approved_userlist $userlist) {
         global $DB;
         $cm = self::assign_cm($userlist->get_context());

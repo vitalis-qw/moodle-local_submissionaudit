@@ -19,23 +19,23 @@ declare(strict_types=1);
 namespace local_submissionaudit\lib\application\security;
 
 /**
- * A user may not perform an action.
+ * Pure PHP. The ui layer turns it into a Moodle "nopermissions" error page.
  *
  * @package    local_submissionaudit
  * @copyright  2026 Vitalii Kuzmyn <vitalis.qw@gmail.com>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-
-/**
- * Pure PHP. The ui layer turns it into a Moodle "nopermissions" error page.
- */
 final class access_denied_exception extends \RuntimeException {
     /**
+     * Constructor.
+     *
      * @param action $action
      * @param int $userid
      */
     public function __construct(
+        /** @var action Action. */
         public readonly action $action,
+        /** @var int Userid. */
         public readonly int $userid,
     ) {
         parent::__construct(sprintf('User %d may not %s', $userid, (string) $action));

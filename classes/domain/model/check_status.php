@@ -25,12 +25,11 @@ namespace local_submissionaudit\domain\model;
  * @copyright  2026 Vitalii Kuzmyn <vitalis.qw@gmail.com>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-
 enum check_status: string {
-    /** The check found nothing wrong. */
+    // The check found nothing wrong.
     case PASS = 'pass';
-    /** The check found something a tutor should look at. */
+    // The check found something a tutor should look at.
     case FAIL = 'fail';
-    /** The check could not run to completion. */
+    // The check could not run to completion.
     case ERROR = 'error';
 }

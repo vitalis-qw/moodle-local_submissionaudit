@@ -18,6 +18,10 @@ declare(strict_types=1);
 
 namespace local_submissionaudit\application\factory;
 
+use local_submissionaudit\domain\model\audit;
+use local_submissionaudit\domain\model\result;
+use local_submissionaudit\domain\model\submission;
+
 /**
  * Builds audits.
  *
@@ -25,11 +29,6 @@ namespace local_submissionaudit\application\factory;
  * @copyright  2026 Vitalii Kuzmyn <vitalis.qw@gmail.com>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-
-use local_submissionaudit\domain\model\audit;
-use local_submissionaudit\domain\model\result;
-use local_submissionaudit\domain\model\submission;
-
 interface audit_factory_interface {
     /**
      * A new audit that has just run; it records the audit_completed event.

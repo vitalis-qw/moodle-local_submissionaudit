@@ -19,25 +19,30 @@ declare(strict_types=1);
 namespace local_submissionaudit\lib\application\security;
 
 /**
- * Base permission: require() built on can().
+ * Subclasses implement can() for the actions of one resource type. Unknown actions deny.
  *
  * @package    local_submissionaudit
  * @copyright  2026 Vitalii Kuzmyn <vitalis.qw@gmail.com>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-
-/**
- * Subclasses implement can() for the actions of one resource type. Unknown actions deny.
- */
 abstract class abstract_permission implements permission_interface {
     /**
+     * Constructor.
+     *
      * @param int $userid The user the decision is about.
      */
     public function __construct(
+        /** @var int The user the decision is about. */
         protected readonly int $userid,
     ) {
     }
 
+    /**
+     * Require.
+     *
+     * @param action $action Action.
+     * @param mixed $subject Subject.
+     */
     final public function require(action $action, mixed $subject = null): void {
         if (!$this->can($action, $subject)) {
             throw new access_denied_exception($action, $this->userid);
@@ -45,6 +50,8 @@ abstract class abstract_permission implements permission_interface {
     }
 
     /**
+     * Get userid.
+     *
      * @return int
      */
     final public function get_userid(): int {

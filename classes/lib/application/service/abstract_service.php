@@ -18,14 +18,6 @@ declare(strict_types=1);
 
 namespace local_submissionaudit\lib\application\service;
 
-/**
- * Base application service.
- *
- * @package    local_submissionaudit
- * @copyright  2026 Vitalii Kuzmyn <vitalis.qw@gmail.com>
- * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
- */
-
 use local_submissionaudit\lib\domain\event\event_publisher_interface;
 use local_submissionaudit\lib\domain\model\aggregate_root;
 
@@ -33,12 +25,19 @@ use local_submissionaudit\lib\domain\model\aggregate_root;
  * An application service orchestrates one use case: load through ports, call the
  * domain, save, publish the events the aggregate recorded. Subclasses add their own
  * dependencies through the constructor and call parent::__construct().
+ *
+ * @package    local_submissionaudit
+ * @copyright  2026 Vitalii Kuzmyn <vitalis.qw@gmail.com>
+ * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 abstract class abstract_service {
     /**
+     * Constructor.
+     *
      * @param event_publisher_interface $publisher
      */
     public function __construct(
+        /** @var event_publisher_interface Publisher. */
         protected readonly event_publisher_interface $publisher,
     ) {
     }

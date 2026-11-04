@@ -19,18 +19,16 @@ declare(strict_types=1);
 namespace local_submissionaudit\lib\domain\exception;
 
 /**
- * An entity does not exist.
+ * Thrown by repository get() and by services that need an entity to exist.
  *
  * @package    local_submissionaudit
  * @copyright  2026 Vitalii Kuzmyn <vitalis.qw@gmail.com>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-
-/**
- * Thrown by repository get() and by services that need an entity to exist.
- */
 class not_found_exception extends domain_exception {
     /**
+     * For.
+     *
      * @param string $entity Entity name or class.
      * @param int|string $id
      * @return static

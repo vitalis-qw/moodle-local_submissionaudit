@@ -18,21 +18,15 @@ declare(strict_types=1);
 
 namespace local_submissionaudit\domain\port;
 
-/**
- * Port: where audits are kept.
- *
- * @package    local_submissionaudit
- * @copyright  2026 Vitalii Kuzmyn <vitalis.qw@gmail.com>
- * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
- */
-
 use local_submissionaudit\domain\model\audit;
 use local_submissionaudit\lib\domain\repository\repository_interface;
 
 /**
  * Ids are submission ids. save() replaces the previous audit of the same submission.
  *
- * @extends repository_interface<audit>
+ * @package    local_submissionaudit
+ * @copyright  2026 Vitalii Kuzmyn <vitalis.qw@gmail.com>
+ * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 interface audit_repository_interface extends repository_interface {
     /**

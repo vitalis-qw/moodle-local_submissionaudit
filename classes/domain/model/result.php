@@ -18,22 +18,20 @@ declare(strict_types=1);
 
 namespace local_submissionaudit\domain\model;
 
-/**
- * Outcome of one check against one submission.
- *
- * @package    local_submissionaudit
- * @copyright  2026 Vitalii Kuzmyn <vitalis.qw@gmail.com>
- * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
- */
-
 use local_submissionaudit\lib\domain\model\value_object_interface;
 
 /**
  * The message is a language-string key plus parameters, not rendered text: the
  * domain does not know which language the tutor reads.
+ *
+ * @package    local_submissionaudit
+ * @copyright  2026 Vitalii Kuzmyn <vitalis.qw@gmail.com>
+ * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-final readonly class result implements value_object_interface {
+final class result implements value_object_interface {
     /**
+     * Constructor.
+     *
      * @param string $checkname Machine name of the check that produced this result.
      * @param check_status $status
      * @param float|null $score Optional numeric score (similarity, confidence, count).
@@ -41,15 +39,22 @@ final readonly class result implements value_object_interface {
      * @param array<string, scalar> $messageparams Parameters for the language string.
      */
     public function __construct(
-        public string $checkname,
-        public check_status $status,
-        public ?float $score,
-        public string $messagekey,
-        public array $messageparams = [],
+        /** @var string Machine name of the check that produced this result. */
+        public readonly string $checkname,
+        /** @var check_status Status. */
+        public readonly check_status $status,
+        /** @var float|null Optional numeric score (similarity, confidence, count). */
+        public readonly ?float $score,
+        /** @var string Language string key, without the component. */
+        public readonly string $messagekey,
+        /** @var array Messageparams. */
+        public readonly array $messageparams = [],
     ) {
     }
 
     /**
+     * Pass.
+     *
      * @param string $checkname
      * @param string $messagekey
      * @param array<string, scalar> $messageparams
@@ -61,6 +66,8 @@ final readonly class result implements value_object_interface {
     }
 
     /**
+     * Fail.
+     *
      * @param string $checkname
      * @param string $messagekey
      * @param array<string, scalar> $messageparams
@@ -72,6 +79,8 @@ final readonly class result implements value_object_interface {
     }
 
     /**
+     * Error.
+     *
      * @param string $checkname
      * @param string $messagekey
      * @param array<string, scalar> $messageparams
@@ -82,12 +91,20 @@ final readonly class result implements value_object_interface {
     }
 
     /**
+     * Is pass.
+     *
      * @return bool
      */
     public function is_pass(): bool {
         return $this->status === check_status::PASS;
     }
 
+    /**
+     * Equals.
+     *
+     * @param value_object_interface $other Other.
+     * @return bool
+     */
     public function equals(value_object_interface $other): bool {
         return $other instanceof self
             && $other->checkname === $this->checkname

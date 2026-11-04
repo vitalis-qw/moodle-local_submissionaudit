@@ -18,19 +18,15 @@ declare(strict_types=1);
 
 namespace local_submissionaudit\lib\domain\model;
 
-/**
- * Entity that records domain events.
- *
- * @package    local_submissionaudit
- * @copyright  2026 Vitalii Kuzmyn <vitalis.qw@gmail.com>
- * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
- */
-
 use local_submissionaudit\lib\domain\event\domain_event_interface;
 
 /**
  * The entry point of a consistency boundary. Domain events are recorded here while the
  * aggregate changes and pulled by the application service after the repository saved it.
+ *
+ * @package    local_submissionaudit
+ * @copyright  2026 Vitalii Kuzmyn <vitalis.qw@gmail.com>
+ * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 abstract class aggregate_root implements entity_interface {
     /** @var domain_event_interface[] */
@@ -57,6 +53,8 @@ abstract class aggregate_root implements entity_interface {
     }
 
     /**
+     * Has events.
+     *
      * @return bool
      */
     final public function has_events(): bool {

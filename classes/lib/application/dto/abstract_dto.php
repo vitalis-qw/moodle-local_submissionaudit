@@ -19,14 +19,6 @@ declare(strict_types=1);
 namespace local_submissionaudit\lib\application\dto;
 
 /**
- * Base DTO with reflection-based array conversion.
- *
- * @package    local_submissionaudit
- * @copyright  2026 Vitalii Kuzmyn <vitalis.qw@gmail.com>
- * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
- */
-
-/**
  * Subclasses declare promoted readonly constructor properties and get from_array()
  * (keyed by parameter name, defaults honoured) and to_array() (nested DTOs expanded)
  * for free.
@@ -34,8 +26,18 @@ namespace local_submissionaudit\lib\application\dto;
  *     final readonly class audit_report extends abstract_dto {
  *         public function __construct(public int $submissionid, public array $results = []) {}
  *     }
+ *
+ * @package    local_submissionaudit
+ * @copyright  2026 Vitalii Kuzmyn <vitalis.qw@gmail.com>
+ * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-abstract readonly class abstract_dto implements dto_interface {
+abstract class abstract_dto implements dto_interface {
+    /**
+     * From array.
+     *
+     * @param array $data Data.
+     * @return static
+     */
     public static function from_array(array $data): static {
         $constructor = (new \ReflectionClass(static::class))->getConstructor();
         $args = [];
@@ -52,6 +54,11 @@ abstract readonly class abstract_dto implements dto_interface {
         return new static(...$args);
     }
 
+    /**
+     * To array.
+     *
+     * @return array
+     */
     public function to_array(): array {
         $out = [];
         foreach (get_object_vars($this) as $name => $value) {
@@ -61,6 +68,8 @@ abstract readonly class abstract_dto implements dto_interface {
     }
 
     /**
+     * Export.
+     *
      * @param mixed $value
      * @return mixed
      */

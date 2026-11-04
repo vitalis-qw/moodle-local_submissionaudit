@@ -16,15 +16,9 @@
 
 declare(strict_types=1);
 
-/**
- * Tests for the audit use case with in-memory doubles.
- *
- * @package    local_submissionaudit
- * @copyright  2026 Vitalii Kuzmyn <vitalis.qw@gmail.com>
- * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
- */
-
 namespace local_submissionaudit\application;
+
+defined('MOODLE_INTERNAL') || die();
 
 require_once(__DIR__ . '/../fixtures/fixtures.php');
 
@@ -44,15 +38,29 @@ use local_submissionaudit\fixtures\in_memory_audit_repository;
 use local_submissionaudit\lib\testing\in_memory_event_publisher;
 
 /**
+ * Tests for the audit use case with in-memory doubles.
+ *
  * @covers \local_submissionaudit\application\service\audit_service
  * @covers \local_submissionaudit\application\mapper\audit_mapper
  * @covers \local_submissionaudit\application\factory\audit_factory
+ *
+ * @package    local_submissionaudit
+ * @copyright  2026 Vitalii Kuzmyn <vitalis.qw@gmail.com>
+ * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 final class audit_service_test extends \basic_testcase {
+    /** @var in_memory_audit_repository Stored audits. */
     private in_memory_audit_repository $audits;
+
+    /** @var in_memory_event_publisher Published events. */
     private in_memory_event_publisher $events;
+
+    /** @var fake_submission_repository Known submissions. */
     private fake_submission_repository $submissions;
 
+    /**
+     * SetUp.
+     */
     protected function setUp(): void {
         parent::setUp();
         $this->audits = new in_memory_audit_repository();
@@ -60,6 +68,11 @@ final class audit_service_test extends \basic_testcase {
         $this->submissions = new fake_submission_repository();
     }
 
+    /**
+     * Service.
+     *
+     * @return audit_service
+     */
     private function service(): audit_service {
         return new audit_service(
             $this->submissions,
@@ -72,6 +85,9 @@ final class audit_service_test extends \basic_testcase {
         );
     }
 
+    /**
+     * Test: run audits stores publishes and reports.
+     */
     public function test_run_audits_stores_publishes_and_reports(): void {
         $this->submissions->add(new submission(7, 8, 9, '<p>one two</p>', []));
 
@@ -96,6 +112,9 @@ final class audit_service_test extends \basic_testcase {
         $this->assertCount(1, $this->events->of_type(audit_completed::class));
     }
 
+    /**
+     * Test: run returns null for a missing submission.
+     */
     public function test_run_returns_null_for_a_missing_submission(): void {
         $this->assertNull($this->service()->run(new audit_request(404)));
         $this->assertSame([], $this->audits->all());

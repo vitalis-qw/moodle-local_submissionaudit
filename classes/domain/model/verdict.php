@@ -18,6 +18,8 @@ declare(strict_types=1);
 
 namespace local_submissionaudit\domain\model;
 
+use local_submissionaudit\lib\domain\model\value_object_interface;
+
 /**
  * What an external analysis service answers about a submission.
  *
@@ -25,22 +27,30 @@ namespace local_submissionaudit\domain\model;
  * @copyright  2026 Vitalii Kuzmyn <vitalis.qw@gmail.com>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-
-use local_submissionaudit\lib\domain\model\value_object_interface;
-
-final readonly class verdict implements value_object_interface {
+final class verdict implements value_object_interface {
     /**
+     * Constructor.
+     *
      * @param bool $passed Whether the service considers the submission acceptable.
      * @param float|null $score Optional score the service reported.
      * @param string $message Free-text explanation from the service.
      */
     public function __construct(
-        public bool $passed,
-        public ?float $score,
-        public string $message,
+        /** @var bool Whether the service considers the submission acceptable. */
+        public readonly bool $passed,
+        /** @var float|null Optional score the service reported. */
+        public readonly ?float $score,
+        /** @var string Free-text explanation from the service. */
+        public readonly string $message,
     ) {
     }
 
+    /**
+     * Equals.
+     *
+     * @param value_object_interface $other Other.
+     * @return bool
+     */
     public function equals(value_object_interface $other): bool {
         return $other instanceof self && $other->passed === $this->passed
             && $other->score === $this->score && $other->message === $this->message;
