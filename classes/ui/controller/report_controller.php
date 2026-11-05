@@ -63,6 +63,7 @@ final class report_controller extends abstract_page_controller implements report
             throw new \coding_exception('report_controller expects a report_request');
         }
         [$course, $cm] = get_course_and_cm_from_cmid($request->id, 'assign');
+        require_login($course, false, $cm);
         $context = \core\context\module::instance((int) $cm->id);
         $title = get_string('reporttitle', 'local_submissionaudit', format_string($cm->name));
 
