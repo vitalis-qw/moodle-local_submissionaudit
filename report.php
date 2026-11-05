@@ -22,8 +22,6 @@
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-defined('MOODLE_INTERNAL') || die();
-
 use local_submissionaudit\ui\controller\report_controller_interface;
 use local_submissionaudit\ui\request\report_request;
 
