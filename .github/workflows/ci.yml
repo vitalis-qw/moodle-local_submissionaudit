@@ -1,6 +1,13 @@
 name: Moodle Plugin CI
 
-on: [push, pull_request]
+on:
+  # Every pull request into the long-lived branches is checked once.
+  pull_request:
+    branches: [development, master]
+  # A release lands on master: one run keeps the README badge current.
+  push:
+    branches: [master]
+  workflow_dispatch:
 
 jobs:
   test:
