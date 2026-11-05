@@ -1,5 +1,7 @@
 # Submission audit (`local_submissionaudit`)
 
+[![Moodle Plugin CI](https://github.com/vitalis-qw/moodle-local_submissionaudit/actions/workflows/ci.yml/badge.svg?branch=master)](https://github.com/vitalis-qw/moodle-local_submissionaudit/actions/workflows/ci.yml)
+
 A Moodle local plugin that runs configurable checks on every assignment submission
 in the background and gives tutors a per-assignment audit report.
 
@@ -114,3 +116,12 @@ A new check is one class implementing `domain\check\check_interface` plus one
 block in `infrastructure\moodle\settings_check_factory` (and a setting). A check
 that needs the outside world asks for a port in its constructor; the port's adapter
 is bound in `service_provider.php`.
+
+## Contributing
+
+See [CONTRIBUTING.md](CONTRIBUTING.md) and the [Code of Conduct](CODE_OF_CONDUCT.md).
+Security problems: [SECURITY.md](SECURITY.md).
+
+## Licence
+
+GNU GPL v3 or later, see [LICENSE](LICENSE).
